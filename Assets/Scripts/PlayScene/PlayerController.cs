@@ -27,6 +27,12 @@ namespace PlayScene
         public CharacterController CharacterController { get; set; }
         // プレイヤーの座標系
         public Transform Transform { get; set; }
+        // 手の位置の当たり判定-右
+        public BoxCollider HandTriggerRight { get; set; }
+        // 手の位置の当たり判定-左
+        public BoxCollider HandTriggerLeft { get; set; }
+        // 頭の位置の当たり判定
+        public BoxCollider HeadTrigger { get; set; }
     }
 
     /// <summary>
@@ -36,6 +42,8 @@ namespace PlayScene
     {
         // 地面にいるか true / false
         public bool IsGrounded { get; set; }
+        // 壁をタッチしているか true / false
+        public bool IsTouchWallForward { get; set; }
         // 横方向移動入力
         public float InputMoveX { get; set; }
         // ジャンプ入力
@@ -51,9 +59,9 @@ namespace PlayScene
     public class PlayerController : MonoBehaviour
     {
         // プレイヤーの状態
-        private readonly PlayerStatus status;
+        private readonly PlayerStatus status = new();
         // プレイヤーのパーツ
-        private readonly PlayerParts parts;
+        private readonly PlayerParts parts = new();
         // プレイヤーの動作
         private IPlayerAction action;
 
@@ -72,8 +80,6 @@ namespace PlayScene
 
             // アクションの更新
             UpdateAction();
-
-            parts.CharacterController.Move(status.Velocity);
         }
 
         /// <summary>
@@ -100,6 +106,22 @@ namespace PlayScene
             {
                 action.Jump();  // 地面に触れていて、ジャンプボタンが押されたらジャンプ
             }
+
+            parts.CharacterController.Move(status.Velocity);
+        }
+
+        void OnCollisionEnter(Collision collision)
+        {
+            foreach (ContactPoint point in collision.contacts)
+            {
+                // point.thisCollider.GetId
+                // TODO: あたったコライダーとあたった元のコライダーを取得する
+            }
+        }
+
+        void OnCollisionExit(Collision collision)
+        {
+
         }
     }
 }
