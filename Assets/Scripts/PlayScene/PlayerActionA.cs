@@ -2,14 +2,15 @@ using UnityEngine;
 
 namespace PlayScene
 {
+    /// <summary>
+    /// プレイヤーのアクションA式
+    /// </summary>
     public class PlayerActionA : IPlayerAction
     {
         // プレイヤーのパーツ
         private PlayerParts parts;
         // プレイヤーの状態
         private PlayerStatus status;
-        // 速度(m/s)
-        private Vector3 velocity;
         public PlayerActionA(PlayerParts parts, PlayerStatus status)
         {
             this.parts = parts;
@@ -17,11 +18,19 @@ namespace PlayScene
         }
 
         /// <summary>
+        /// 着地の処理
+        /// </summary>
+        public void Landing()
+        {
+            status.Velocity = Vector3.zero;
+        }
+
+        /// <summary>
         /// 重力を適用する
         /// </summary>
         public void Gravity()
         {
-            status.Velocity += Config.Physics.Gravity * Time.deltaTime * Vector3.down;
+            status.Velocity += Config.Physics.Gravity * Vector3.down;
         }
 
         /// <summary>
@@ -50,7 +59,7 @@ namespace PlayScene
         public void Move(float force)
         {
             Vector3 v = status.Velocity;
-            v.x = force * Time.deltaTime;
+            v.x = force;
             status.Velocity = v;
         }
     }

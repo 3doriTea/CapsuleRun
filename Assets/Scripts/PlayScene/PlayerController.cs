@@ -8,6 +8,14 @@ namespace PlayScene
     public interface IPlayerAction
     {
         /// <summary>
+        /// 着地を適用
+        /// </summary>
+        void Landing();
+        /// <summary>
+        /// 重力を適用する
+        /// </summary>
+        void Gravity();
+        /// <summary>
         /// ジャンプする
         /// </summary>
         void Jump();
@@ -40,6 +48,8 @@ namespace PlayScene
     /// </summary>
     public class PlayerStatus
     {
+        // ジャンプしているか
+        public bool IsJumping { get; set; }
         // 地面にいるか true / false
         public bool IsGrounded { get; set; }
         // 壁をタッチしているか true / false
@@ -50,6 +60,11 @@ namespace PlayScene
         public bool InputJump { get; set; }
         // 速度(m/s)
         public Vector3 Velocity { get; set; }
+
+        public override string ToString()
+        {
+            return $"IsJumping:{IsJumping}, IsGrounded:{IsGrounded}, IsTouchWallForward:{IsTouchWallForward}, InputMoveX:{InputMoveX}, InputJump:{InputJump}, Velocity:{Velocity}";
+        }
     }
 
     /// <summary>
@@ -80,6 +95,8 @@ namespace PlayScene
 
             // アクションの更新
             UpdateAction();
+
+            Debug.Log(status);
         }
 
         /// <summary>
@@ -102,12 +119,33 @@ namespace PlayScene
                 action.Move(status.InputMoveX);  // 入力がデッドゾーンより大きいなら移動アクション
             }
 
-            if (status.InputJump && status.IsGrounded)
+            if (status.IsGrounded)
             {
-                action.Jump();  // 地面に触れていて、ジャンプボタンが押されたらジャンプ
+                action.Landing();  // 地面に触れているなら着地処理
+
+                if (status.IsJumping)
+                {
+                    action.Jump();  // 地面に触れていて、ジャンプボタンが押されたらジャンプ
+                }
+                else
+                {
+                    if (status.InputJump)
+                    {
+                        status.IsJumping = true;
+                    }
+                }
+            }
+            else
+            {
+                if (status.IsJumping)
+                {
+                    status.IsJumping = false;
+                }
+
+                action.Gravity();  // 重力適用
             }
 
-            parts.CharacterController.Move(status.Velocity);
+            parts.CharacterController.Move(status.Velocity * Time.deltaTime);
         }
 
         void OnCollisionEnter(Collision collision)
