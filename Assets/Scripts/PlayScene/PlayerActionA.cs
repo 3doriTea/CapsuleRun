@@ -59,7 +59,7 @@ namespace PlayScene
         public void Move(float force)
         {
             Vector3 v = status.Velocity;
-            v.x = force;
+            v.x = force * Config.Player.MoveSpeedPerSec;
             status.Velocity = v;
         }
     }
