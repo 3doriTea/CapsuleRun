@@ -31,7 +31,7 @@ namespace PlayScene
         public class Player
         {
             // 移動スピード(m/s)
-            public const float MoveSpeedPerSec = 1.0f;
+            public const float MoveSpeedPerSec = 5.0f;
             // ジャンプする高さ(m)
             public const float JumpHeight = 3.0f;
         }
