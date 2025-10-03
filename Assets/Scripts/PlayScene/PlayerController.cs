@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace PlayScene
@@ -67,7 +67,7 @@ namespace PlayScene
         // 速度(m/s)
         public Vector3 Velocity { get; set; }
         // 当たっているコライダーのId
-        public List<int> HitColliderId { get; set; } = new ();
+        public List<(int self, int target)> HitColliderId { get; set; } = new ();
 
         public override string ToString()
         {
@@ -163,13 +163,44 @@ namespace PlayScene
         {
             foreach (ContactPoint point in collision.contacts)
             {
-                point.thisCollider.GetInstanceID();
-                // TODO: あたったコライダーとあたった元のコライダーを取得する
+                // 当てられたコライダーと当たったコライダーのId情報
+                (int self, int target) hit = (
+                    point.thisCollider.GetInstanceID(),
+                    point.otherCollider.GetInstanceID());
+
+                // 一致した要素があるかどうか
+                bool hasMatchElement = status.HitColliderId.Any(element => element == hit);
+
+                if (hasMatchElement)
+                {
+                    continue;
+                }
+
+                status.HitColliderId.Add(hit);
             }
         }
 
         void OnCollisionExit(Collision collision)
         {
+            foreach (ContactPoint point in collision.contacts)
+            {
+                // 離れられたコライダーと離れたコライダーのId情報
+                (int self, int target) hit = (
+                    point.thisCollider.GetInstanceID(),
+                    point.otherCollider.GetInstanceID());
+
+                // 一致した要素があるかどうか
+                bool hasMatchElement = status.HitColliderId.Any(element => element == hit);
+
+                if (hasMatchElement == false)
+                {
+                    Debug.LogWarning($"当たった履歴がないオブジェクトが離れた");
+                    continue;
+                }
+
+                // 指定要素の削除
+                status.HitColliderId.Remove(hit);
+            }
 
         }
     }

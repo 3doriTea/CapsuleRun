@@ -7,6 +7,8 @@ public class CameraController : MonoBehaviour
     private new Transform transform;
     [SerializeField]
     private Transform playerTransform;
+    // [SerializeField]
+    // private Transform cameraPointsTransform;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
