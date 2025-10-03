@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace PlayScene
 {
@@ -29,18 +31,22 @@ namespace PlayScene
     /// <summary>
     /// 動作として使うプレイヤーのパーツ
     /// </summary>
+    [System.Serializable]
     public class PlayerParts
     {
+        [HideInInspector]
         // プレイヤーの移動に使うキャラクターコントローラコンポーネント
         public CharacterController CharacterController { get; set; }
         // プレイヤーの座標系
+        [HideInInspector]
         public Transform Transform { get; set; }
         // 手の位置の当たり判定-右
-        public BoxCollider HandTriggerRight { get; set; }
+        public BoxCollider handTriggerRight;
         // 手の位置の当たり判定-左
-        public BoxCollider HandTriggerLeft { get; set; }
+        public BoxCollider handTriggerLeft;
         // 頭の位置の当たり判定
-        public BoxCollider HeadTrigger { get; set; }
+        public BoxCollider headTrigger;
+        public List<(int self, int target)> OnTriggersId { get; set; }
     }
 
     /// <summary>
@@ -60,10 +66,18 @@ namespace PlayScene
         public bool InputJump { get; set; }
         // 速度(m/s)
         public Vector3 Velocity { get; set; }
+        // 当たっているコライダーのId
+        public List<int> HitColliderId { get; set; } = new ();
 
         public override string ToString()
         {
-            return $"IsJumping:{IsJumping}, IsGrounded:{IsGrounded}, IsTouchWallForward:{IsTouchWallForward}, InputMoveX:{InputMoveX}, InputJump:{InputJump}, Velocity:{Velocity}";
+            return string.Join("", new string[]
+            {
+                $"IsJumping:{IsJumping}, IsGrounded:{IsGrounded}, ",
+                $"IsTouchWallForward:{IsTouchWallForward}, InputMoveX:{InputMoveX}, ",
+                $"InputJump:{InputJump}, Velocity:{Velocity}",
+                $"HitColliderId.Count:{HitColliderId.Count}",
+            });
         }
     }
 
@@ -76,7 +90,8 @@ namespace PlayScene
         // プレイヤーの状態
         private readonly PlayerStatus status = new();
         // プレイヤーのパーツ
-        private readonly PlayerParts parts = new();
+        [SerializeField]
+        private PlayerParts parts;
         // プレイヤーの動作
         private IPlayerAction action;
 
@@ -126,7 +141,6 @@ namespace PlayScene
                 if (status.IsJumping)
                 {
                     action.Jump();  // 地面に触れていて、ジャンプボタンが押されたらジャンプ
-                    Debug.Log("Jumping");
                     status.IsJumping = false;
                 }
                 else
@@ -149,7 +163,7 @@ namespace PlayScene
         {
             foreach (ContactPoint point in collision.contacts)
             {
-                // point.thisCollider.GetId
+                point.thisCollider.GetInstanceID();
                 // TODO: あたったコライダーとあたった元のコライダーを取得する
             }
         }
