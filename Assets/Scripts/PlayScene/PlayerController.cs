@@ -126,6 +126,8 @@ namespace PlayScene
                 if (status.IsJumping)
                 {
                     action.Jump();  // 地面に触れていて、ジャンプボタンが押されたらジャンプ
+                    Debug.Log("Jumping");
+                    status.IsJumping = false;
                 }
                 else
                 {
@@ -137,11 +139,6 @@ namespace PlayScene
             }
             else
             {
-                if (status.IsJumping)
-                {
-                    status.IsJumping = false;
-                }
-
                 action.Gravity();  // 重力適用
             }
 

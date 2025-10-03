@@ -30,7 +30,7 @@ namespace PlayScene
         /// </summary>
         public void Gravity()
         {
-            status.Velocity += Config.Physics.Gravity * Vector3.down;
+            status.Velocity += Config.Physics.Gravity * Time.deltaTime * Vector3.down;
         }
 
         /// <summary>
