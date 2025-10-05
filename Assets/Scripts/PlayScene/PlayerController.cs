@@ -28,6 +28,24 @@ namespace PlayScene
         void Move(float force);
     }
 
+    public interface IPlayerActionStatus
+    {
+        enum PlayerActionStatusType
+        {
+            Run,
+            Jump
+        }
+
+        /// <summary>
+        /// 左右移動更新処理
+        /// </summary>
+        void UpdateMove(PlayerStatus status, IPlayerAction action);
+        /// <summary>
+        /// ジャンプ処理
+        /// </summary>
+        void UpdateJump(PlayerStatus status, IPlayerAction action);
+    }
+
     /// <summary>
     /// 動作として使うプレイヤーのパーツ
     /// </summary>
@@ -40,13 +58,16 @@ namespace PlayScene
         // プレイヤーの座標系
         [HideInInspector]
         public Transform Transform { get; set; }
-        // 手の位置の当たり判定-右
-        public BoxCollider handTriggerRight;
-        // 手の位置の当たり判定-左
-        public BoxCollider handTriggerLeft;
-        // 頭の位置の当たり判定
-        public BoxCollider headTrigger;
+        // // 手の位置の当たり判定-右
+        // public BoxCollider handTriggerRight;
+        // // 手の位置の当たり判定-左
+        // public BoxCollider handTriggerLeft;
+        // // 頭の位置の当たり判定
+        // public BoxCollider headTrigger;
         public List<(int self, int target)> OnTriggersId { get; set; }
+        // プレイヤーのパーツ
+        [SerializeField]
+        public PlayerPartsController[] partsControllers;
     }
 
     /// <summary>
@@ -60,6 +81,8 @@ namespace PlayScene
         public bool IsGrounded { get; set; }
         // 壁をタッチしているか true / false
         public bool IsTouchWallForward { get; set; }
+        // 天井をタッチしているか
+        public bool IsTouchWallUp { get; set; }
         // 横方向移動入力
         public float InputMoveX { get; set; }
         // ジャンプ入力
@@ -67,16 +90,16 @@ namespace PlayScene
         // 速度(m/s)
         public Vector3 Velocity { get; set; }
         // 当たっているコライダーのId
-        public List<(int self, int target)> HitColliderId { get; set; } = new ();
+        public List<(int self, int target)> HitColliderId { get; set; } = new();
 
         public override string ToString()
         {
             return string.Join("", new string[]
             {
                 $"IsJumping:{IsJumping}, IsGrounded:{IsGrounded}, ",
-                $"IsTouchWallForward:{IsTouchWallForward}, InputMoveX:{InputMoveX}, ",
-                $"InputJump:{InputJump}, Velocity:{Velocity}",
-                $"HitColliderId.Count:{HitColliderId.Count}",
+                $"IsTouchWallForward:{IsTouchWallForward}, IsTouchWallUp:{IsTouchWallUp}, ",
+                $"InputMoveX:{InputMoveX}, InputJump:{InputJump}, ",
+                $"Velocity:{Velocity}, HitColliderId.Count:{HitColliderId.Count}",
             });
         }
     }
@@ -94,6 +117,9 @@ namespace PlayScene
         private PlayerParts parts;
         // プレイヤーの動作
         private IPlayerAction action;
+        // プレイヤーの動作ステータス
+        private IPlayerActionStatus actionStatus;
+
 
         void Start()
         {
@@ -122,6 +148,31 @@ namespace PlayScene
             status.IsGrounded = parts.CharacterController.isGrounded;
             status.InputJump = Input.GetButton("Jump");
             status.InputMoveX = Input.GetAxis("Horizontal");
+
+            status.IsTouchWallUp = false;
+            status.IsTouchWallForward = false;
+
+            foreach (PlayerPartsController controller in parts.partsControllers)
+            {
+                if (controller.IsTouching())
+                {
+                    switch (controller.GetPartsType())
+                    {
+                        case PlayerPartsType.Head:
+                            status.IsTouchWallUp = true;
+                            break;
+                        case PlayerPartsType.HandRight:
+                            status.IsTouchWallForward = true;
+                            break;
+                        case PlayerPartsType.HandLeft:
+                            status.IsTouchWallForward = true;
+                            break;
+                        default:
+                            Debug.LogError($"未処理のパーツタイプ");
+                            return;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -129,10 +180,7 @@ namespace PlayScene
         /// </summary>
         void UpdateAction()
         {
-            if (status.InputMoveX * status.InputMoveX > Config.Input.MoveDeadzoneSquared)
-            {
-                action.Move(status.InputMoveX);  // 入力がデッドゾーンより大きいなら移動アクション
-            }
+
 
             if (status.IsGrounded)
             {
@@ -159,49 +207,49 @@ namespace PlayScene
             parts.CharacterController.Move(status.Velocity * Time.deltaTime);
         }
 
-        void OnCollisionEnter(Collision collision)
-        {
-            foreach (ContactPoint point in collision.contacts)
-            {
-                // 当てられたコライダーと当たったコライダーのId情報
-                (int self, int target) hit = (
-                    point.thisCollider.GetInstanceID(),
-                    point.otherCollider.GetInstanceID());
+        // void OnCollisionEnter(Collision collision)
+        // {
+        //     foreach (ContactPoint point in collision.contacts)
+        //     {
+        //         // 当てられたコライダーと当たったコライダーのId情報
+        //         (int self, int target) hit = (
+        //             point.thisCollider.GetInstanceID(),
+        //             point.otherCollider.GetInstanceID());
 
-                // 一致した要素があるかどうか
-                bool hasMatchElement = status.HitColliderId.Any(element => element == hit);
+        //         // 一致した要素があるかどうか
+        //         bool hasMatchElement = status.HitColliderId.Any(element => element == hit);
 
-                if (hasMatchElement)
-                {
-                    continue;
-                }
+        //         if (hasMatchElement)
+        //         {
+        //             continue;
+        //         }
 
-                status.HitColliderId.Add(hit);
-            }
-        }
+        //         status.HitColliderId.Add(hit);
+        //     }
+        // }
 
-        void OnCollisionExit(Collision collision)
-        {
-            foreach (ContactPoint point in collision.contacts)
-            {
-                // 離れられたコライダーと離れたコライダーのId情報
-                (int self, int target) hit = (
-                    point.thisCollider.GetInstanceID(),
-                    point.otherCollider.GetInstanceID());
+        // void OnCollisionExit(Collision collision)
+        // {
+        //     foreach (ContactPoint point in collision.contacts)
+        //     {
+        //         // 離れられたコライダーと離れたコライダーのId情報
+        //         (int self, int target) hit = (
+        //             point.thisCollider.GetInstanceID(),
+        //             point.otherCollider.GetInstanceID());
 
-                // 一致した要素があるかどうか
-                bool hasMatchElement = status.HitColliderId.Any(element => element == hit);
+        //         // 一致した要素があるかどうか
+        //         bool hasMatchElement = status.HitColliderId.Any(element => element == hit);
 
-                if (hasMatchElement == false)
-                {
-                    Debug.LogWarning($"当たった履歴がないオブジェクトが離れた");
-                    continue;
-                }
+        //         if (hasMatchElement == false)
+        //         {
+        //             Debug.LogWarning($"当たった履歴がないオブジェクトが離れた");
+        //             continue;
+        //         }
 
-                // 指定要素の削除
-                status.HitColliderId.Remove(hit);
-            }
+        //         // 指定要素の削除
+        //         status.HitColliderId.Remove(hit);
+        //     }
 
-        }
+        // }
     }
 }

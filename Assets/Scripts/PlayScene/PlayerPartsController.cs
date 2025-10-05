@@ -18,7 +18,7 @@ namespace PlayScene
     /// <summary>
     /// プレイヤーのパーツ
     /// </summary>
-    [RequireComponent(typeof(CapsuleCollider))]
+    [RequireComponent(typeof(Collider))]
     public class PlayerPartsController : MonoBehaviour
     {
         private readonly List<int> hitInstanceId = new();

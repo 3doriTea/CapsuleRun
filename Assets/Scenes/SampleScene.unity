@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 306790114}
   - component: {fileID: 306790113}
   - component: {fileID: 306790112}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -487,7 +487,8 @@ GameObject:
   m_Component:
   - component: {fileID: 585298859}
   - component: {fileID: 585298860}
-  m_Layer: 0
+  - component: {fileID: 585298861}
+  m_Layer: 10
   m_Name: HandRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -524,7 +525,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -532,6 +533,19 @@ CapsuleCollider:
   m_Height: 1.5
   m_Direction: 0
   m_Center: {x: 0.5, y: 0, z: 0}
+--- !u!114 &585298861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 585298858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 961366c9145f1c54986561cd40ede255, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 2
 --- !u!1 &601547717
 GameObject:
   m_ObjectHideFlags: 0
@@ -758,7 +772,8 @@ GameObject:
   m_Component:
   - component: {fileID: 663061106}
   - component: {fileID: 663061107}
-  m_Layer: 0
+  - component: {fileID: 663061108}
+  m_Layer: 10
   m_Name: HandLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -795,7 +810,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -803,6 +818,19 @@ CapsuleCollider:
   m_Height: 1.5
   m_Direction: 0
   m_Center: {x: 0.5, y: 0, z: 0}
+--- !u!114 &663061108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 663061105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 961366c9145f1c54986561cd40ede255, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
 --- !u!1 &726586315
 GameObject:
   m_ObjectHideFlags: 0
@@ -1320,7 +1348,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1714278879}
   - component: {fileID: 1714278880}
-  m_Layer: 0
+  - component: {fileID: 1714278881}
+  m_Layer: 10
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1363,6 +1392,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 0.5, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1714278881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1714278878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 961366c9145f1c54986561cd40ede255, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
 --- !u!1 &1789482417
 GameObject:
   m_ObjectHideFlags: 0
@@ -1407,7 +1449,8 @@ GameObject:
   - component: {fileID: 1793556071}
   - component: {fileID: 1793556072}
   - component: {fileID: 1793556073}
-  m_Layer: 0
+  - component: {fileID: 1793556074}
+  m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1446,9 +1489,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parts:
-    handTriggerRight: {fileID: 0}
-    handTriggerLeft: {fileID: 0}
-    headTrigger: {fileID: 0}
+    partsControllers:
+    - {fileID: 585298861}
+    - {fileID: 663061108}
+    - {fileID: 1714278881}
 --- !u!143 &1793556073
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1474,6 +1518,33 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!54 &1793556074
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1793556069}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1813630881
 GameObject:
   m_ObjectHideFlags: 0

@@ -20,14 +20,19 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // プレイヤーの方向ベクトル
+        // プレイヤの方向ベクトル
         Vector3 dir = Vector3.Normalize(playerTransform.position - transform.position);
-        // 回転する
+        // 滑らかに回転する
         transform.rotation = Quaternion.Slerp(
             transform.rotation,
             Quaternion.LookRotation(dir, Vector3.up),
             Config.Camera.LookingRateSec * Time.deltaTime);
 
-
+        Vector3 moveAt = playerTransform.position
+            + Vector3.back * Config.Camera.ToPlayerDistance
+            + Vector3.up * Config.Camera.ToPlayerHeightOffset;
+        //Vector3 diff = moveAt - transform.position;
+        // 滑らかにプレイヤ追従
+        transform.position = Vector3.Slerp(moveAt, transform.position, Config.Camera.MoveRateSec * Time.deltaTime);
     }
 }

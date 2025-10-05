@@ -14,6 +14,12 @@ namespace PlayScene
         {
             // カメラがプレイヤを見るときの滑らか具合 (1秒間あたりの)
             public const float LookingRateSec = 1.0f;
+            // カメラがプレイヤを追従するときの滑らか具合 (1秒間あたりの)
+            public const float MoveRateSec = 0.1f;
+            // プレイヤとカメラの距離
+            public const float ToPlayerDistance = 10.0f;
+            // プレイヤとカメラの高さの差
+            public const float ToPlayerHeightOffset = 2.0f;
         }
 
         /// <summary>
