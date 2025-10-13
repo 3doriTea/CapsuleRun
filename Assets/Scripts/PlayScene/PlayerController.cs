@@ -180,7 +180,7 @@ namespace PlayScene
         /// </summary>
         void UpdateAction()
         {
-
+            action.Move(status.InputMoveX);
 
             if (status.IsGrounded)
             {
@@ -206,50 +206,5 @@ namespace PlayScene
 
             parts.CharacterController.Move(status.Velocity * Time.deltaTime);
         }
-
-        // void OnCollisionEnter(Collision collision)
-        // {
-        //     foreach (ContactPoint point in collision.contacts)
-        //     {
-        //         // 当てられたコライダーと当たったコライダーのId情報
-        //         (int self, int target) hit = (
-        //             point.thisCollider.GetInstanceID(),
-        //             point.otherCollider.GetInstanceID());
-
-        //         // 一致した要素があるかどうか
-        //         bool hasMatchElement = status.HitColliderId.Any(element => element == hit);
-
-        //         if (hasMatchElement)
-        //         {
-        //             continue;
-        //         }
-
-        //         status.HitColliderId.Add(hit);
-        //     }
-        // }
-
-        // void OnCollisionExit(Collision collision)
-        // {
-        //     foreach (ContactPoint point in collision.contacts)
-        //     {
-        //         // 離れられたコライダーと離れたコライダーのId情報
-        //         (int self, int target) hit = (
-        //             point.thisCollider.GetInstanceID(),
-        //             point.otherCollider.GetInstanceID());
-
-        //         // 一致した要素があるかどうか
-        //         bool hasMatchElement = status.HitColliderId.Any(element => element == hit);
-
-        //         if (hasMatchElement == false)
-        //         {
-        //             Debug.LogWarning($"当たった履歴がないオブジェクトが離れた");
-        //             continue;
-        //         }
-
-        //         // 指定要素の削除
-        //         status.HitColliderId.Remove(hit);
-        //     }
-
-        // }
     }
 }
