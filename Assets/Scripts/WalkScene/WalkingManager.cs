@@ -270,6 +270,10 @@ namespace WalkScene
                 {
                     previousStepCount = currentStepCount;
                 }
+                if (startStepCount < 0)
+                {
+                    startStepCount = currentStepCount;
+                }
 
                 AddStep(currentStepCount - previousStepCount);
                 previousStepCount = currentStepCount;
