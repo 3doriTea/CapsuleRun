@@ -110,6 +110,11 @@ namespace WalkScene
         [SerializeField]
         private InfoController infoController;
 
+        public void DestroyMe()
+        {
+            Destroy(gameObject);
+        }
+
         private void Start()
         {
             Debug.Assert(walkingController != null, "walkingController is null");
@@ -132,6 +137,7 @@ namespace WalkScene
 
         private void CheckMoving()
         {
+            Debug.Log($"Steps = previousStepCount:{previousStepCount} - startStepCount:{startStepCount}");
             infoController.SetStepCount(StepCount);
             float totalDistance = TotalDistance;
             infoController.SetDistance(totalDistance);

@@ -21,6 +21,19 @@ namespace WalkScene
         private readonly GameObject[] sceneGameObjects = new GameObject[(int)InnerScene.Max];
         private InnerScene currentScene = InnerScene.Start;
 
+        public void OnButton(string name)
+        {
+            switch (name)
+            {
+                case "Finish":
+                    MoveScene(InnerScene.ToPlay);
+                    break;
+                default:
+                    Debug.LogError($"Unknown button name:{name}");
+                    break;
+            }
+        }
+
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
