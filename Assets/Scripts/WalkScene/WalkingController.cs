@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace WalkScene
 {
@@ -7,6 +8,8 @@ namespace WalkScene
     /// </summary>
     public class WalkingController : MonoBehaviour
     {
+        const string PlayScene = "SampleScene";
+
         /// <summary>
         /// Unityのシーンではなく、Walkシーンの中での個別シーン
         /// </summary>
@@ -27,6 +30,9 @@ namespace WalkScene
             {
                 case "Finish":
                     MoveScene(InnerScene.ToPlay);
+                    break;
+                case "ToGame":
+                    SceneManager.LoadScene(PlayScene);
                     break;
                 default:
                     Debug.LogError($"Unknown button name:{name}");
