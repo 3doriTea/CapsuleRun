@@ -187,7 +187,7 @@ namespace WalkScene
             }
             else
             {
-                if (history[^1].Equals(info))
+                if (history[^1].PositionEquals(info))
                 {
                     return false;
                 }

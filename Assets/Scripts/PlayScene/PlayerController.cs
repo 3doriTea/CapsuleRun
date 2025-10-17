@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Linq;
+using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
 namespace PlayScene
@@ -119,6 +119,11 @@ namespace PlayScene
         private IPlayerAction action;
         // プレイヤーの動作ステータス
         private IPlayerActionStatus actionStatus;
+        // 入力コントローラ
+        [SerializeField]
+        private InputController inputController;
+
+        private InputAction moveAction;
 
 
         void Start()
@@ -127,6 +132,9 @@ namespace PlayScene
             parts.Transform = transform;
 
             action = new PlayerActionA(parts, status);
+
+            moveAction = InputSystem.actions.FindAction("Move");
+            moveAction.Enable();
         }
 
         void Update()
@@ -140,14 +148,19 @@ namespace PlayScene
             Debug.Log(status);
         }
 
+        void OnDestroy()
+        {
+            moveAction.Disable();
+        }
+
         /// <summary>
         /// 状態の更新
         /// </summary>
         void UpdateState()
         {
             status.IsGrounded = parts.CharacterController.isGrounded;
-            status.InputJump = Input.GetButton("Jump");
-            status.InputMoveX = Input.GetAxis("Horizontal");
+            status.InputJump = inputController.InputJump || Keyboard.current[Key.Space].isPressed;
+            status.InputMoveX = inputController.InputHorizontal + moveAction.ReadValue<Vector2>().x;
 
             status.IsTouchWallUp = false;
             status.IsTouchWallForward = false;
