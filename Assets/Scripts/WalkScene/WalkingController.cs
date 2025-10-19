@@ -48,16 +48,16 @@ namespace WalkScene
                 sceneGameObjects[i] = transform.GetChild(i).gameObject;
                 sceneGameObjects[i].SetActive(false);
             }
-            MoveScene(InnerScene.Start);
+            MoveScene(InnerScene.Start, true);
         }
 
         /// <summary>
         /// 個別シーンを遷移する
         /// </summary>
         /// <param name="next">次のシーン</param>
-        public void MoveScene(InnerScene next)
+        public void MoveScene(InnerScene next, bool force = false)
         {
-            if (currentScene == next)
+            if (currentScene == next && !force)
             {
                 return;  // 今も次も同じなら無視
             }

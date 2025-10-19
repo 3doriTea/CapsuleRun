@@ -272,17 +272,24 @@ namespace WalkScene
             while (true)
             {
                 int currentStepCount = stepCounter.stepCounter.ReadValue();
-                if (previousStepCount < 0)
+
+                if (currentStepCount > 0)
                 {
+
+                    if (previousStepCount < 0)
+                    {
+                        previousStepCount = currentStepCount;
+                        Debug.Log($"初回起動prevStep：{previousStepCount}");
+                    }
+                    if (startStepCount < 0)
+                    {
+                        startStepCount = currentStepCount;
+                        Debug.Log($"初回起動startStepCount：{startStepCount}");
+                    }
+
+                    AddStep(currentStepCount - previousStepCount);
                     previousStepCount = currentStepCount;
                 }
-                if (startStepCount < 0)
-                {
-                    startStepCount = currentStepCount;
-                }
-
-                AddStep(currentStepCount - previousStepCount);
-                previousStepCount = currentStepCount;
 
                 yield return stepCountDelay;
             }

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using System;
 
 namespace PlayScene
 {
@@ -26,30 +27,37 @@ namespace PlayScene
         /// </summary>
         /// <param name="force">移動方向と力</param>
         void Move(float force);
+        /// <summary>
+        /// 登る
+        /// </summary>
+        /// <param name="force">移動方向と力</param>
+        void Climb(float force);
     }
 
     public interface IPlayerActionStatus
     {
-        enum PlayerActionStatusType
+        public enum Type
         {
             Run,
-            Jump
+            Climb,
+            Swing,
+            Max,
         }
 
         /// <summary>
         /// 左右移動更新処理
         /// </summary>
-        void UpdateMove(PlayerStatus status, IPlayerAction action);
+        void UpdateMove(PlayerStatus status, IPlayerAction action, Action<Type> changeStatus);
         /// <summary>
         /// ジャンプ処理
         /// </summary>
-        void UpdateJump(PlayerStatus status, IPlayerAction action);
+        void UpdateJump(PlayerStatus status, IPlayerAction action, Action<Type> changeStatus);
     }
 
     /// <summary>
     /// 動作として使うプレイヤーのパーツ
     /// </summary>
-    [System.Serializable]
+    [Serializable]
     public class PlayerParts
     {
         [HideInInspector]
@@ -77,6 +85,8 @@ namespace PlayScene
     {
         // ジャンプしているか
         public bool IsJumping { get; set; }
+        // 登っているか
+        public bool IsClimbing { get; set; }
         // 地面にいるか true / false
         public bool IsGrounded { get; set; }
         // 壁をタッチしているか true / false
@@ -118,7 +128,9 @@ namespace PlayScene
         // プレイヤーの動作
         private IPlayerAction action;
         // プレイヤーの動作ステータス
-        private IPlayerActionStatus actionStatus;
+        private IPlayerActionStatus[] playerActionStatus = new IPlayerActionStatus[(int)IPlayerActionStatus.Type.Max];
+        //private IPlayerActionStatus actionStatus;
+        private IPlayerActionStatus.Type currentPASType;
         // 入力コントローラ
         [SerializeField]
         private InputController inputController;
@@ -132,6 +144,18 @@ namespace PlayScene
             parts.Transform = transform;
 
             action = new PlayerActionA(parts, status);
+            playerActionStatus[(int)IPlayerActionStatus.Type.Run] = new PlayerActionStatusRun();
+            playerActionStatus[(int)IPlayerActionStatus.Type.Climb] = new PlayerActionStatusClimb();
+            playerActionStatus[(int)IPlayerActionStatus.Type.Swing] = new PlayerActionStatusSwing();
+            currentPASType = IPlayerActionStatus.Type.Run;
+
+            foreach (IPlayerActionStatus status in playerActionStatus)
+            {
+                if (status == null)
+                {
+                    Debug.LogError("playerActionStatusにnullが指定されています。");
+                }
+            }
 
             moveAction = InputSystem.actions.FindAction("Move");
             moveAction.Enable();
@@ -193,6 +217,8 @@ namespace PlayScene
         /// </summary>
         void UpdateAction()
         {
+
+
             action.Move(status.InputMoveX);
 
             if (status.IsGrounded)
