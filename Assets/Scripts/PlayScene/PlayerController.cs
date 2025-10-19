@@ -217,8 +217,25 @@ namespace PlayScene
         /// </summary>
         void UpdateAction()
         {
+            Debug.Log($"UpdateActionPC{currentPASType}");
 
+            playerActionStatus[(int)currentPASType].UpdateMove(
+                status,
+                action,
+                type =>
+                {
+                    currentPASType = type;
+                });
 
+            playerActionStatus[(int)currentPASType].UpdateJump(
+                status,
+                action,
+                type =>
+                {
+                    currentPASType = type;
+                });
+
+#if false
             action.Move(status.InputMoveX);
 
             if (status.IsGrounded)
@@ -242,6 +259,7 @@ namespace PlayScene
             {
                 action.Gravity();  // 重力適用
             }
+#endif
 
             parts.CharacterController.Move(status.Velocity * Time.deltaTime);
         }

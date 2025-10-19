@@ -16,6 +16,7 @@ namespace PlayScene
 			IPlayerAction action,
 			System.Action<IPlayerActionStatus.Type> changeStatus)
 		{
+			Debug.Log("act");
 			if (status.IsGrounded)
 			{
 				action.Landing();  // 地面に触れているなら着地処理
@@ -29,6 +30,7 @@ namespace PlayScene
 				{
 					if (status.InputJump)
 					{
+						Debug.Log("jump");
 						status.IsJumping = true;
 					}
 				}
@@ -80,6 +82,7 @@ namespace PlayScene
 			IPlayerAction action,
 			System.Action<IPlayerActionStatus.Type> changeStatus)
 		{
+			Debug.Log("UpdateActionClimb");
 			if (status.IsTouchWallForward)
 			{
 				if (status.InputMoveX * status.InputMoveX > Config.Input.MoveDeadzoneSquared)
@@ -128,6 +131,7 @@ namespace PlayScene
 			IPlayerAction action,
 			System.Action<IPlayerActionStatus.Type> changeStatus)
 		{
+			Debug.Log("UpdateActionSwing");
 			if (status.InputMoveX * status.InputMoveX > Config.Input.MoveDeadzoneSquared)
 			{
 				action.Move(status.InputMoveX);  // 入力がデッドゾーンより大きいなら移動アクション
