@@ -59,7 +59,18 @@ namespace PlayScene
         public void Move(float force)
         {
             Vector3 v = status.Velocity;
-            v.x = force;
+            v.x = force * Config.Player.MoveSpeedPerSec;
+            status.Velocity = v;
+        }
+
+        /// <summary>
+        /// 縦移動処理
+        /// </summary>
+        /// <param name="force">移動力(m/s)</param>
+        public void Climb(float force)
+        {
+            Vector3 v = status.Velocity;
+            v.y = force * Config.Player.MoveSpeedPerSec;
             status.Velocity = v;
         }
     }

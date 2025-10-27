@@ -13,7 +13,13 @@ namespace PlayScene
         public class Camera
         {
             // カメラがプレイヤを見るときの滑らか具合 (1秒間あたりの)
-            public const float LookingRateSec = 1.0f;
+            public const float LookingRateSec = 0.7f;
+            // カメラがプレイヤを追従するときの滑らか具合 (1秒間あたりの)
+            public const float MoveRateSec = 0.1f;
+            // プレイヤとカメラの距離
+            public const float ToPlayerDistance = 20.0f;
+            // プレイヤとカメラの高さの差
+            public const float ToPlayerHeightOffset = 4.0f;
         }
 
         /// <summary>
@@ -31,9 +37,9 @@ namespace PlayScene
         public class Player
         {
             // 移動スピード(m/s)
-            public const float MoveSpeedPerSec = 1.0f;
+            public const float MoveSpeedPerSec = 10.0f;
             // ジャンプする高さ(m)
-            public const float JumpHeight = 3.0f;
+            public const float JumpHeight = 7.0f;
         }
 
         /// <summary>
