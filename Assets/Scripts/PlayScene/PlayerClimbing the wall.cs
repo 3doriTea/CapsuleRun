@@ -2,14 +2,19 @@ using UnityEngine;
 using PlayScene;
 using UnityEngine.UIElements.Experimental;
 using Unity.VisualScripting;
+using Unity.Mathematics;
 public class PlayerClimbingthewall : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    //Ray‚ð”ò‚Î‚·ŠJŽn“_
+    public Transform rayOrigin;
+    public float rayDistance = 0.5f;
+    public LayerMask ClimbAbleLayer;
+    private RaycastHit hit;
     void Start()
     {
-       
-       
-       
+        Vector3 direction = transform.forward;
     }
 
     // Update is called once per frame
@@ -19,34 +24,6 @@ public class PlayerClimbingthewall : MonoBehaviour
     }
     void Climb()
     {
-        bool isClimd = false;
-        bool isGlab = false;
-        Ray wallCheck = new Ray(transform.position + Vector3.up, transform.forward);
-        Ray upperWallCheck = new Ray(transform.position + Vector3.up, transform.forward);
-
-        bool isForwardwall = Physics.Raycast(wallCheck);
-        bool isUpperWall = Physics.Raycast(upperWallCheck);
-
-
-        Vector3 ClimbPos;
-        Vector3 ClimbOldPos;
-        if (isForwardwall && !isForwardwall)
-        {
-            isGlab = true;
-        }
-        if (isGlab && !isForwardwall)
-        {
-            ClimbOldPos = transform.position;
-
-            ClimbPos = transform.position + transform.forward * 4 + Vector3.up * 5.5f;
-            isGlab = false;
-            isClimd = true;
-
-        }
-        if(isClimd)
-        {
-           
-           
-        }
+       
     }
 }
