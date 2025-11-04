@@ -22,7 +22,7 @@ namespace PlayScene
         /// </summary>
         public void Landing()
         {
-            status.Velocity = Vector3.zero;
+            status.Velocity = new Vector3{ x = status.Velocity.x * 0.98f, y = 0.0f, z = 0.0f };
         }
 
         /// <summary>
