@@ -41,6 +41,7 @@ namespace PlayScene
             Run,
             Climb,
             Swing,
+            Goal,
             Max,
         }
 
@@ -134,9 +135,11 @@ namespace PlayScene
         // 入力コントローラ
         [SerializeField]
         private InputController inputController;
-
+        [SerializeField]
+        private LinesController linesController;
         private InputAction moveAction;
 
+        private bool onGoal = false;
 
         void Start()
         {
@@ -147,6 +150,7 @@ namespace PlayScene
             playerActionStatus[(int)IPlayerActionStatus.Type.Run] = new PlayerActionStatusRun();
             playerActionStatus[(int)IPlayerActionStatus.Type.Climb] = new PlayerActionStatusClimb();
             playerActionStatus[(int)IPlayerActionStatus.Type.Swing] = new PlayerActionStatusSwing();
+            playerActionStatus[(int)IPlayerActionStatus.Type.Goal] = new PlayerActionStatusGoal();
             currentPASType = IPlayerActionStatus.Type.Run;
 
             foreach (IPlayerActionStatus status in playerActionStatus)
@@ -172,6 +176,15 @@ namespace PlayScene
             Debug.Log(status);
         }
 
+        /// <summary>
+        /// ゴールした時の処理
+        /// </summary>
+        public void OnGoal()
+        {
+            onGoal = true;
+            currentPASType = IPlayerActionStatus.Type.Goal;
+        }
+
         void OnDestroy()
         {
             moveAction.Disable();
@@ -182,6 +195,11 @@ namespace PlayScene
         /// </summary>
         void UpdateState()
         {
+            if (linesController.GetGoalDistanceRate() >= 1.0f)
+            {
+                OnGoal();
+            }
+
             status.IsGrounded = parts.CharacterController.isGrounded;
             status.InputJump = inputController.InputJump || Keyboard.current[Key.Space].isPressed;
             status.InputMoveX = inputController.InputHorizontal + moveAction.ReadValue<Vector2>().x;
