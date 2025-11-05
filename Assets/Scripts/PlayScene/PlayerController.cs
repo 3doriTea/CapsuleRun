@@ -121,6 +121,9 @@ namespace PlayScene
     [RequireComponent(typeof(CharacterController))]
     public class PlayerController : MonoBehaviour
     {
+        // 横入力スライダー
+        [SerializeField]
+        private MoveSliderController moveSliderController;
         // プレイヤーの状態
         private readonly PlayerStatus status = new();
         // プレイヤーのパーツ
@@ -143,6 +146,8 @@ namespace PlayScene
 
         void Start()
         {
+            Debug.Assert(moveSliderController != null, "横移動入力スライダーをアタッチしてください。");
+
             parts.CharacterController = GetComponent<CharacterController>();
             parts.Transform = transform;
 
@@ -202,7 +207,8 @@ namespace PlayScene
 
             status.IsGrounded = parts.CharacterController.isGrounded;
             status.InputJump = inputController.InputJump || Keyboard.current[Key.Space].isPressed;
-            status.InputMoveX = inputController.InputHorizontal + moveAction.ReadValue<Vector2>().x;
+            // MEMO: 横移動入力スライダーに切り替え 元:status.InputMoveX = inputController.InputHorizontal + moveAction.ReadValue<Vector2>().x;
+            status.InputMoveX = moveSliderController.Value;
 
             status.IsTouchWallUp = false;
             status.IsTouchWallForward = false;
