@@ -68,12 +68,14 @@ namespace PlayScene
 				action.Landing();
 				if (status.InputJump)
 				{
+					
 					status.IsClimbing = false;
 				}
 			}
 			else
 			{
-				action.Gravity();  // 重力適用
+             
+                action.Gravity();  // 重力適用
 			}
 		}
 
