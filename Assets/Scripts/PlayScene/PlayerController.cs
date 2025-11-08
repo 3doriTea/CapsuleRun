@@ -41,6 +41,7 @@ namespace PlayScene
             Run,
             Climb,
             Swing,
+            Goal,
             Max,
         }
 
@@ -120,6 +121,9 @@ namespace PlayScene
     [RequireComponent(typeof(CharacterController))]
     public class PlayerController : MonoBehaviour
     {
+        // 横入力スライダー
+        [SerializeField]
+        private MoveSliderController moveSliderController;
         // プレイヤーの状態
         private readonly PlayerStatus status = new();
         // プレイヤーのパーツ
@@ -134,12 +138,16 @@ namespace PlayScene
         // 入力コントローラ
         [SerializeField]
         private InputController inputController;
-
+        [SerializeField]
+        private LinesController linesController;
         private InputAction moveAction;
 
+        private bool onGoal = false;
 
         void Start()
         {
+            Debug.Assert(moveSliderController != null, "横移動入力スライダーをアタッチしてください。");
+
             parts.CharacterController = GetComponent<CharacterController>();
             parts.Transform = transform;
 
@@ -147,6 +155,7 @@ namespace PlayScene
             playerActionStatus[(int)IPlayerActionStatus.Type.Run] = new PlayerActionStatusRun();
             playerActionStatus[(int)IPlayerActionStatus.Type.Climb] = new PlayerActionStatusClimb();
             playerActionStatus[(int)IPlayerActionStatus.Type.Swing] = new PlayerActionStatusSwing();
+            playerActionStatus[(int)IPlayerActionStatus.Type.Goal] = new PlayerActionStatusGoal();
             currentPASType = IPlayerActionStatus.Type.Run;
 
             foreach (IPlayerActionStatus status in playerActionStatus)
@@ -172,6 +181,15 @@ namespace PlayScene
             Debug.Log(status);
         }
 
+        /// <summary>
+        /// ゴールした時の処理
+        /// </summary>
+        public void OnGoal()
+        {
+            onGoal = true;
+            currentPASType = IPlayerActionStatus.Type.Goal;
+        }
+
         void OnDestroy()
         {
             moveAction.Disable();
@@ -182,9 +200,15 @@ namespace PlayScene
         /// </summary>
         void UpdateState()
         {
+            if (linesController.GetGoalDistanceRate() >= 1.0f)
+            {
+                OnGoal();
+            }
+
             status.IsGrounded = parts.CharacterController.isGrounded;
             status.InputJump = inputController.InputJump || Keyboard.current[Key.Space].isPressed;
-            status.InputMoveX = inputController.InputHorizontal + moveAction.ReadValue<Vector2>().x;
+            // MEMO: 横移動入力スライダーに切り替え 元:status.InputMoveX = inputController.InputHorizontal + moveAction.ReadValue<Vector2>().x;
+            status.InputMoveX = moveSliderController.Value;
 
             status.IsTouchWallUp = false;
             status.IsTouchWallForward = false;

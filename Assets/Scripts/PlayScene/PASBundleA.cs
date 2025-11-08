@@ -9,6 +9,36 @@ namespace PlayScene
 	/// <summary>
 	/// プレイヤーのステータス-走る
 	/// </summary>
+	public class PlayerActionStatusGoal : IPlayerActionStatus
+	{
+		public void UpdateJump(
+			PlayerStatus status,
+			IPlayerAction action,
+			System.Action<IPlayerActionStatus.Type> changeStatus)
+		{
+			if (status.IsGrounded)
+			{
+				action.Landing();  // 地面に触れているなら着地処理
+
+				status.IsJumping = false;
+			}
+			else
+			{
+				action.Gravity();  // 重力適用
+			}
+		}
+
+		public void UpdateMove(
+			PlayerStatus status,
+			IPlayerAction action,
+			System.Action<IPlayerActionStatus.Type> changeStatus)
+		{
+			action.Move(1.0f);
+		}
+	}
+	/// <summary>
+	/// プレイヤーのステータス-走る
+	/// </summary>
 	public class PlayerActionStatusRun : IPlayerActionStatus
 	{
 		public void UpdateJump(
