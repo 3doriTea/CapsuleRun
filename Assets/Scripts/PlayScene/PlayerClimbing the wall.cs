@@ -5,7 +5,7 @@ using PlayScene;
 
 [RequireComponent(typeof(PlayerController))]
 public class PlayerClimbingthewall : MonoBehaviour
-{
+    {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     [SerializeField]
     private InputAction moveAction;
