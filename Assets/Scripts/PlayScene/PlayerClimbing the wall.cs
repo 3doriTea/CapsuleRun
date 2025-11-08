@@ -1,7 +1,6 @@
 using UnityEngine;
-using System.Collections;
-[RequireComponent(typeof(PlayerContoroller))]
-    public class PlayerClimbingthewall : MonoBehaviour
+using System.Collections.Generic;
+public class PlayerClimbingthewall : MonoBehaviour
     {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -12,7 +11,7 @@ using System.Collections;
     public float rayDistance = 0.6f;
     public LayerMask climbableWallLayer;
 
-    private PlayerController PController;
+    private PlayerController PController = FindObjectOfType<PController>();
     private Vector3 moveDirection = Vector.zero;
     private bool IsClimbing = false;
     private RaycastHit wallHit;
