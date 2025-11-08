@@ -1,29 +1,101 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using System.Collections.Generic;
 using PlayScene;
-using UnityEngine.UIElements.Experimental;
-using Unity.VisualScripting;
-using Unity.Mathematics;
+
+[RequireComponent(typeof(PlayerController))]
 public class PlayerClimbingthewall : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField]
+    private InputAction moveAction;
 
-    //Ray���΂��J�n�_
-    public Transform rayOrigin;
-    public float rayDistance = 0.5f;
-    public LayerMask ClimbAbleLayer;
-    private RaycastHit hit;
+    public float climbSpeed = 3.0f;
+    public float walkspeed = 5.0f;
+
+    private float rayDistance = 2.0f;
+    public LayerMask climbableWallLayer;
+    private PlayerController playerController;
+    private CharacterController PController;
+    private Vector3 moveDirection = Vector3.zero;
+    private bool IsClimbing = false;
+    private RaycastHit wallHit;
+
     void Start()
     {
-        Vector3 direction = transform.forward;
+        playerController = GetComponent<PlayerController>();
+        PController = GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-       
+
+        //RayCastによる壁の検出
+        bool wallDetected = Physics.Raycast(transform.position, transform.right, out wallHit, rayDistance);
+        Debug.DrawRay(transform.position, transform.right * rayDistance, new Color(1, 0, 1));
+
+        Mouse mouse = Mouse.current;
+        // bool rightMouseHeld = Input.GetMouseButton(1);
+        bool rightMouseHeld = mouse.rightButton.IsPressed();
+
+        if (wallDetected && rightMouseHeld && !IsClimbing)
+        {
+            StartClimbing();
+        }
+        else if (IsClimbing && (!wallDetected || !rightMouseHeld))
+        {
+            StopClimbing();
+        }
+        if (IsClimbing)
+        {
+            HandClimbing();
+        }
+        else
+        {
+            NormalMove();
+        }
     }
-    void Climb()
+    private void StartClimbing()
     {
-       
+        IsClimbing = true;
+        Debug.Log("壁を登ってるよ");
+        moveDirection = Vector3.zero;
     }
+    private void StopClimbing()
+    {
+        IsClimbing = false;
+        Debug.Log("壁登りしていない");
+        moveDirection.y = 0;
+    }
+
+    private void HandClimbing()
+    {
+        Vector3 wallNormal = wallHit.normal;
+        float capuleHalfHeight = PController.height / 2.0f;
+        Vector3 wallStickPosition = wallHit.point + wallNormal * 0.05f;
+
+        //float verticalInput = Input.GetAxis("Vertical");
+        // 横移動2乗して登る
+        float verticalInput =
+            playerController.status.InputMoveX
+            * playerController.status.InputMoveX;
+
+        Vector3 climbUp = Vector3.up * verticalInput;
+
+        Vector3 targetMove = climbUp.normalized * climbSpeed;
+
+        PController.Move(targetMove * Time.deltaTime);
+    }
+    private void NormalMove()
+    {
+        //float verticalInput = Input.GetAxis("Vertical");
+        //float horizontalInput = Input.GetAxis("Horizontal");
+        float horizontalInput = playerController.status.InputMoveX;
+        moveDirection = new Vector3(horizontalInput, 0, 0);
+        moveDirection = transform.TransformDirection(moveDirection);
+        moveDirection *= walkspeed;
+    }
+
+
 }

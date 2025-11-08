@@ -125,7 +125,7 @@ namespace PlayScene
         [SerializeField]
         private MoveSliderController moveSliderController;
         // プレイヤーの状態
-        private readonly PlayerStatus status = new();
+        public readonly PlayerStatus status = new();
         // プレイヤーのパーツ
         [SerializeField]
         private PlayerParts parts;
@@ -178,7 +178,7 @@ namespace PlayScene
             // アクションの更新
             UpdateAction();
 
-            Debug.Log(status);
+            //Debug.Log(status);
         }
 
         /// <summary>
