@@ -1,0 +1,26 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+namespace TitleScene
+{
+    public class ButtonController : MonoBehaviour
+    {
+        const string PlaySceneName = "PlayScene";
+        const string WalkSceneName = "WalkScene";
+
+        public void OnButton(string name)
+        {
+            switch (name)
+            {
+                case "play":
+                    SceneManager.LoadScene(PlaySceneName);
+                    break;
+                case "save":
+                    SceneManager.LoadScene(WalkSceneName);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+}
