@@ -80,13 +80,18 @@ public class PlayerClimbingthewall : MonoBehaviour
         float verticalInput =
             playerController.status.InputMoveX
             * playerController.status.InputMoveX;
+        if (capuleHalfHeight > verticalInput)
+        {
+            Vector3 climbUp = Vector3.up * verticalInput;
 
-        Vector3 climbUp = Vector3.up * verticalInput;
+            Vector3 targetMove = climbUp.normalized * climbSpeed;
 
-        Vector3 targetMove = climbUp.normalized * climbSpeed;
+            PController.Move(targetMove * Time.deltaTime);
 
-        PController.Move(targetMove * Time.deltaTime);
+        }
     }
+       
+        
     private void NormalMove()
     {
         //float verticalInput = Input.GetAxis("Vertical");
