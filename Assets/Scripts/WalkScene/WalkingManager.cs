@@ -127,6 +127,8 @@ namespace WalkScene
 
             InputSystem.EnableDevice(StepCounter.current);
 
+            Screen.orientation = ScreenOrientation.Portrait;  // 画面縦に
+
             StartCoroutine(UpdateLocation());
             StartCoroutine(UpdateStepCounter());
         }
