@@ -39,10 +39,12 @@ public class PlayerClimbingthewall : MonoBehaviour
         // bool rightMouseHeld = Input.GetMouseButton(1);
         bool rightMouseHeld = mouse.rightButton.IsPressed();
 
+        //壁に当たったら
         if (wallDetected && rightMouseHeld && !IsClimbing)
         {
             StartClimbing();
         }
+        //壁から離れたら
         else if (IsClimbing && (!wallDetected || !rightMouseHeld))
         {
             StopClimbing();
@@ -71,24 +73,33 @@ public class PlayerClimbingthewall : MonoBehaviour
 
     private void HandClimbing()
     {
-        Vector3 wallNormal = wallHit.normal;
-        float capuleHalfHeight = PController.height / 2.0f;
-        Vector3 wallStickPosition = wallHit.point + wallNormal * 0.05f;
+       
+            Vector3 wallNormal = wallHit.normal;
+            Quaternion targetRotaion = Quaternion.LookRotation(-wallNormal, Vector3.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotaion, Time.deltaTime * 10.0f); 
+            
+            float capuleHalfHeight = PController.height / 2.0f;
+            Vector3 wallStickPosition = wallHit.point + wallNormal * 0.05f;
 
-        //float verticalInput = Input.GetAxis("Vertical");
-        // 横移動2乗して登る
-        float verticalInput =
-            playerController.status.InputMoveX
-            * playerController.status.InputMoveX;
-        if (capuleHalfHeight > verticalInput)
-        {
-            Vector3 climbUp = Vector3.up * verticalInput;
+            //float verticalInput = Input.GetAxis("Vertical");
+            // 横移動2乗して登る
+            float verticalInput =
+                playerController.status.InputMoveX
+                * playerController.status.InputMoveX;
 
+
+            
+           //上に移動
+           Vector3 climbUp = Vector3.up * verticalInput;
+
+            //最終的な移動の方向
             Vector3 targetMove = climbUp.normalized * climbSpeed;
 
             PController.Move(targetMove * Time.deltaTime);
 
-        }
+        
+
+
     }
        
         
