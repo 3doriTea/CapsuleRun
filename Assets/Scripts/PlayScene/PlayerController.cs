@@ -247,6 +247,15 @@ namespace PlayScene
         {
             Debug.Log($"UpdateActionPC{currentPASType}");
 
+            if (status.IsClimbing)
+            {
+                currentPASType = IPlayerActionStatus.Type.Climb;
+            }
+            else
+            {
+                currentPASType = IPlayerActionStatus.Type.Run;
+            }
+
             playerActionStatus[(int)currentPASType].UpdateMove(
                 status,
                 action,
@@ -262,32 +271,6 @@ namespace PlayScene
                 {
                     currentPASType = type;
                 });
-
-#if false
-            action.Move(status.InputMoveX);
-
-            if (status.IsGrounded)
-            {
-                action.Landing();  // 地面に触れているなら着地処理
-
-                if (status.IsJumping)
-                {
-                    action.Jump();  // 地面に触れていて、ジャンプボタンが押されたらジャンプ
-                    status.IsJumping = false;
-                }
-                else
-                {
-                    if (status.InputJump)
-                    {
-                        status.IsJumping = true;
-                    }
-                }
-            }
-            else
-            {
-                action.Gravity();  // 重力適用
-            }
-#endif
 
             parts.CharacterController.Move(status.Velocity * Time.deltaTime);
         }
