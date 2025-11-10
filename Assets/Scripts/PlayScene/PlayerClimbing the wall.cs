@@ -20,13 +20,15 @@ public class PlayerClimbingthewall : MonoBehaviour
     private CharacterController PController;
 
     private Vector3 moveDirection = Vector3.zero;
-    private bool IsClimbing = false;
+    //
+    //private bool IsClimbing = false;
     private RaycastHit wallHit;
 
     void Start()
     {
         playerController = GetComponent<PlayerController>();
         PController = GetComponent<CharacterController>();
+        
     }
 
     // Update is called once per frame
@@ -39,22 +41,27 @@ public class PlayerClimbingthewall : MonoBehaviour
         Mouse mouse = Mouse.current;
         // bool rightMouseHeld = Input.GetMouseButton(1);
         bool rightMouseHeld = mouse.rightButton.IsPressed();
-
+        if(wallDetected)
+        {
+            
+        }
 
         //壁に当たったら
-        if (wallDetected && rightMouseHeld && !IsClimbing)
+        if (wallDetected &&  !playerController.status.IsClimbing)
         {
-
+            Debug.Log("壁を登れるよ");
             StartClimbing();
         }
         //壁から離れたら
-        else if (IsClimbing && (!wallDetected || !rightMouseHeld))
+        else if (playerController.status.IsClimbing )
         {
+            if(!wallDetected)
             StopClimbing();
         }
-        if (IsClimbing)
+        if (playerController.status.IsClimbing)
         {
             HandClimbing();
+
         }
         else
         {
@@ -63,13 +70,13 @@ public class PlayerClimbingthewall : MonoBehaviour
     }
     private void StartClimbing()
     {
-        IsClimbing = true;
+        playerController.status.IsClimbing = true;
         Debug.Log("Climb wall ");
         moveDirection = Vector3.zero;
     }
     private void StopClimbing()
     {
-        IsClimbing = false;
+        playerController.status.IsClimbing = false;
         Debug.Log("Dont Climb wall");
         moveDirection.y = 0;
     }
