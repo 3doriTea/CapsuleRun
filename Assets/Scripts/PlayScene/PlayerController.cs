@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using System;
+using UnityEngine.Events;
 
 namespace PlayScene
 {
@@ -143,9 +144,12 @@ namespace PlayScene
         private InputAction moveAction;
 
         private bool onGoal = false;
+        public UnityEvent OnGoalAction = new ();
 
         void Start()
         {
+            OnGoalAction.AddListener(OnGoal);
+
             Debug.Assert(moveSliderController != null, "横移動入力スライダーをアタッチしてください。");
 
             parts.CharacterController = GetComponent<CharacterController>();
@@ -202,7 +206,7 @@ namespace PlayScene
         {
             if (linesController.GetGoalDistanceRate() >= 1.0f)
             {
-                OnGoal();
+                OnGoalAction.Invoke();
             }
 
             status.IsGrounded = parts.CharacterController.isGrounded;
