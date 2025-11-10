@@ -28,7 +28,7 @@ namespace PlayScene
         public class Physics
         {
             // 重力加速度
-            public const float Gravity = 9.0f;
+            public const float Gravity = 36.0f;
         }
 
         /// <summary>

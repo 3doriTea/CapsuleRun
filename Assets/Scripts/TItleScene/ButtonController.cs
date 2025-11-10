@@ -5,7 +5,7 @@ namespace TitleScene
 {
     public class ButtonController : MonoBehaviour
     {
-        const string PlaySceneName = "PlayScene";
+        const string PlaySceneName = "SampleScene";
         const string WalkSceneName = "Walking";
 
         public void OnButton(string name)

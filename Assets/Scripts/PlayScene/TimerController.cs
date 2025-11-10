@@ -8,6 +8,7 @@ namespace PlayScene
         [SerializeField]
         private TextMeshProUGUI textMesh;
         private float timer = 0.0f;
+        private bool stopped = false;
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
@@ -17,6 +18,11 @@ namespace PlayScene
         // Update is called once per frame
         void Update()
         {
+            if (stopped)
+            {
+                return;
+            }
+
             timer += Time.deltaTime;
 
             int minutes = (int)(timer / 60.0f);
@@ -26,6 +32,12 @@ namespace PlayScene
             int milliseconds = (int)(timer % 1.0f * 100.0f);
 
             textMesh.SetText($"{minutes:D2} : {seconds:D2} . {milliseconds:D2}");
+        }
+
+        public float StopAndGetTime()
+        {
+            stopped = true;
+            return timer;
         }
     }
 }
