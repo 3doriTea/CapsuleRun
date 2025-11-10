@@ -57,14 +57,21 @@ namespace WalkScene
         }
         private static WaitForSeconds _waitForSeconds1_0 = new(1.0f);
         private static WaitForSeconds stepCountDelay = new(3.0f);
-        private int StepCount  // 計測開始からの歩数
+        public int StepCount  // 計測開始からの歩数
+#if UNITY_ANDROID
         {
             get
             {
                 return previousStepCount - startStepCount;
             }
         }
-        private float TotalDistance
+#elif UNITY_EDITOR
+        {
+            get; private set;
+        }
+#endif
+        public float TotalDistance  // km
+#if UNITY_ANDROID
         {
             get
             {
@@ -98,6 +105,11 @@ namespace WalkScene
                 }
             }
         }
+#elif UNITY_EDITOR
+        {
+            get; private set;
+        }
+#endif
         private readonly List<LocationStamp> history = new(HistoryCapacity);  // 座標履歴
 
         private int startStepCount = -1;
@@ -125,17 +137,36 @@ namespace WalkScene
                 Permission.RequestUserPermission(ActivityRecognition);
             }
 
+#if UNITY_ANDROID
             InputSystem.EnableDevice(StepCounter.current);
 
             Screen.orientation = ScreenOrientation.Portrait;  // 画面縦に
 
             StartCoroutine(UpdateLocation());
             StartCoroutine(UpdateStepCounter());
+#endif
         }
 
+#if UNITY_EDITOR
         private void Update()
         {
+            if (Keyboard.current.gKey.wasPressedThisFrame)
+            {
+                AddStep(0);
+                CheckMoving();
+            }
+            if (Keyboard.current.bKey.wasPressedThisFrame)
+            {
+                const float WalkDistanceKm = 0.1f;
+                const int StepPerWalkDistanceKm = 60;
+                
+                TotalDistance += WalkDistanceKm;
+                AddStep(StepPerWalkDistanceKm);
+                StepCount += StepPerWalkDistanceKm;
+                CheckMoving();
+            }
         }
+#endif
 
         private void CheckMoving()
         {
