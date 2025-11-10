@@ -16,7 +16,11 @@ namespace PlayScene
 			IPlayerAction action,
 			System.Action<IPlayerActionStatus.Type> changeStatus)
 		{
-			if (status.IsGrounded)
+			if (status.IsClimbing)
+            {
+				action.Climb(status.InputMoveX);
+            }
+			else if (status.IsGrounded)
 			{
 				action.Landing();  // 地面に触れているなら着地処理
 
