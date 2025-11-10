@@ -41,11 +41,7 @@ public class PlayerClimbingthewall : MonoBehaviour
         Mouse mouse = Mouse.current;
         // bool rightMouseHeld = Input.GetMouseButton(1);
         bool rightMouseHeld = mouse.rightButton.IsPressed();
-        if(wallDetected)
-        {
-            
-        }
-
+       
         //壁に当たったら
         if (wallDetected &&  !playerController.status.IsClimbing)
         {
@@ -86,9 +82,9 @@ public class PlayerClimbingthewall : MonoBehaviour
 
         Debug.Log("wall Climbing");
        
-        Vector3 wallNormal = wallHit.normal;
-        float capuleHalfHeight = PController.height / 2.0f;
-           Vector3 wallStickPosition = wallHit.point + wallNormal * 0.05f;
+        //Vector3 wallNormal = wallHit.normal;
+        //float capuleHalfHeight = PController.height / 2.0f;
+          // Vector3 wallStickPosition = wallHit.point + wallNormal * 0.05f;
         //Vector3 wallStickPosition = wallHit.point + wallNormal * (PController.radius + 0.05f);
         //float verticalInput = Input.GetAxis("Vertical");
         // 横移動2乗して登る
