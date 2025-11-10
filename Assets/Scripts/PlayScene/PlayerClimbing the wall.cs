@@ -41,11 +41,7 @@ public class PlayerClimbingthewall : MonoBehaviour
         Mouse mouse = Mouse.current;
         // bool rightMouseHeld = Input.GetMouseButton(1);
         bool rightMouseHeld = mouse.rightButton.IsPressed();
-        if(wallDetected)
-        {
-            
-        }
-
+       
         //壁に当たったら
         if (wallDetected &&  !playerController.status.IsClimbing)
         {
