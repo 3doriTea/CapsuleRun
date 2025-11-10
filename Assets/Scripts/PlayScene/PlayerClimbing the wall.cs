@@ -5,7 +5,7 @@ using PlayScene;
 
 [RequireComponent(typeof(PlayerController))]
 public class PlayerClimbingthewall : MonoBehaviour
-    {
+{
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     [SerializeField]
     private InputAction moveAction;
@@ -18,11 +18,10 @@ public class PlayerClimbingthewall : MonoBehaviour
 
     private PlayerController playerController;
     private CharacterController PController;
-    
+
     private Vector3 moveDirection = Vector3.zero;
     private bool IsClimbing = false;
     private RaycastHit wallHit;
-    public float gravity = 9.8f; // 通常時の重力
 
     void Start()
     {
@@ -37,10 +36,10 @@ public class PlayerClimbingthewall : MonoBehaviour
         //RayCastによる壁の検出
         bool wallDetected = Physics.Raycast(transform.position, transform.right, out wallHit, rayDistance);
         Debug.DrawRay(transform.position, transform.right * rayDistance, new Color(1, 0, 1));
-
         Mouse mouse = Mouse.current;
         // bool rightMouseHeld = Input.GetMouseButton(1);
         bool rightMouseHeld = mouse.rightButton.IsPressed();
+
 
         //壁に当たったら
         if (wallDetected && rightMouseHeld && !IsClimbing)
@@ -65,55 +64,43 @@ public class PlayerClimbingthewall : MonoBehaviour
     private void StartClimbing()
     {
         IsClimbing = true;
-        Debug.Log("壁を登ってるよ");
-         moveDirection = Vector3.zero;
-        
+        Debug.Log("Climb wall ");
+        moveDirection = Vector3.zero;
     }
     private void StopClimbing()
     {
         IsClimbing = false;
-        Debug.Log("壁登りしていない");
+        Debug.Log("Dont Climb wall");
         moveDirection.y = 0;
     }
 
     private void HandClimbing()
-    {
+    { 
 
-        //  bool rightMouseHeld = mouse.rightButton.IsPressed();
-
-        Debug.Log("壁を登り中");
+        Debug.Log("wall Climbing");
        
         Vector3 wallNormal = wallHit.normal;
-            Quaternion targetRotaion = Quaternion.LookRotation(-wallNormal, Vector3.up);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotaion, Time.deltaTime * 10.0f); 
-            
-            float capuleHalfHeight = PController.height / 2.0f;
+        float capuleHalfHeight = PController.height / 2.0f;
            Vector3 wallStickPosition = wallHit.point + wallNormal * 0.05f;
         //Vector3 wallStickPosition = wallHit.point + wallNormal * (PController.radius + 0.05f);
         //float verticalInput = Input.GetAxis("Vertical");
         // 横移動2乗して登る
         float verticalInput =
-                playerController.status.InputMoveX
+                  playerController.status.InputMoveX
                 * playerController.status.InputMoveX;
-        float horizontalInput = playerController.status.InputMoveX;
 
-        Vector3 climbRight = Vector3.Cross(wallNormal, Vector3.up).normalized;
         //上に移動
-        //Vector3 climbUp = Vector3.up * verticalInput;
-        Vector3 climbUp = Vector3.Cross(climbRight, wallNormal).normalized;
-
-        Vector3 VerticalMove = Vector3.up * verticalInput;
-
-        Vector3 horizontalMove = climbRight * horizontalInput;
-        //最終的な移動の方向
-        Vector3 targetMove = (climbUp + climbRight).normalized * climbSpeed;
-        //    Vector3 targetMove = climbUp.normalized * climbSpeed;
-
-        PController.Move(targetMove * Time.deltaTime);
-
+        Vector3 climbUp = Vector3.up * verticalInput;
         
 
+       // Vector3 VerticalMove = Vector3.up * verticalInput;
 
+       
+        //最終的な移動の方向
+        
+           Vector3 targetMove = climbUp.normalized * climbSpeed;
+
+        PController.Move(targetMove * Time.deltaTime);
     }
        
         
@@ -125,7 +112,6 @@ public class PlayerClimbingthewall : MonoBehaviour
         moveDirection = new Vector3(horizontalInput, 0, 0);
         moveDirection = transform.TransformDirection(moveDirection);
         moveDirection *= walkspeed;
-       
     }
 
 
