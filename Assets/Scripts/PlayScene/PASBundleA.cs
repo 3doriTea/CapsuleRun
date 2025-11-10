@@ -97,6 +97,7 @@ namespace PlayScene
 			IPlayerAction action,
 			System.Action<IPlayerActionStatus.Type> changeStatus)
 		{
+			Debug.Log("UpdateJump --------- CLIMB");
 			if (status.IsClimbing)
 			{
 				action.Landing();
@@ -108,8 +109,7 @@ namespace PlayScene
 			}
 			else
 			{
-             
-                action.Gravity();  // 重力適用
+                //action.Gravity();  // 重力適用
 			}
 		}
 
@@ -123,7 +123,7 @@ namespace PlayScene
 			{
 				if (status.InputMoveX * status.InputMoveX > Config.Input.MoveDeadzoneSquared)
 				{
-					action.Move(status.InputMoveX);  // 入力がデッドゾーンより大きいなら移動アクション
+					action.Climb(status.InputMoveX);  // 入力がデッドゾーンより大きいなら移動アクション
 				}
 			}
 		}
