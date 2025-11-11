@@ -7,6 +7,7 @@ namespace PlayScene
     /// </summary>
     public class PlayerActionA : IPlayerAction
     {
+        const float StopRate = 0.98f;
         // プレイヤーのパーツ
         private PlayerParts parts;
         // プレイヤーの状態
@@ -22,7 +23,13 @@ namespace PlayScene
         /// </summary>
         public void Landing()
         {
-            status.Velocity = new Vector3{ x = status.Velocity.x * 0.98f, y = 0.0f, z = 0.0f };
+            float vy = status.Velocity.y;
+            status.Velocity = new Vector3
+            {
+                x = status.Velocity.x * StopRate,
+                y = vy < 0.0f ? 0.0f : vy,  // 下方向への速度は消す
+                z = 0.0f
+            };
         }
 
         /// <summary>

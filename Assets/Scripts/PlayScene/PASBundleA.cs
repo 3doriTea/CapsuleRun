@@ -103,8 +103,7 @@ namespace PlayScene
 				action.Landing();
 				if (status.InputJump)
 				{
-					
-					status.IsClimbing = false;
+					status.IsJumping = true;
 				}
 			}
 			else

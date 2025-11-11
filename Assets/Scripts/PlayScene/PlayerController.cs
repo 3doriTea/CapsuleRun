@@ -122,6 +122,9 @@ namespace PlayScene
     [RequireComponent(typeof(CharacterController))]
     public class PlayerController : MonoBehaviour
     {
+        const float RightAngle = 0.0f;
+        const float LeftAngle = 180.0f;
+
         // 横入力スライダー
         [SerializeField]
         private MoveSliderController moveSliderController;
@@ -210,7 +213,11 @@ namespace PlayScene
             }
 
             status.IsGrounded = parts.CharacterController.isGrounded;
-            status.InputJump = inputController.InputJump || Keyboard.current[Key.Space].isPressed;
+            status.InputJump = inputController.InputJump
+#if UNITY_EDITOR
+                || Keyboard.current[Key.Space].isPressed;
+#endif
+            ;
             // MEMO: 横移動入力スライダーに切り替え 元:status.InputMoveX = inputController.InputHorizontal + moveAction.ReadValue<Vector2>().x;
             status.InputMoveX = moveSliderController.Value;
 
@@ -247,7 +254,16 @@ namespace PlayScene
         {
             Debug.Log($"UpdateActionPC{currentPASType}");
 
-            if (status.IsClimbing)
+            if (status.InputMoveX > 0.0f)
+            {
+                transform.rotation = Quaternion.Euler(0.0f, RightAngle, 0.0f);
+            }
+            else if (status.InputMoveX < 0.0f)
+            {
+                transform.rotation = Quaternion.Euler(0.0f, LeftAngle, 0.0f);
+            }
+            
+            if (status.IsClimbing && (status.InputMoveX * status.InputMoveX > 0.0f))
             {
                 currentPASType = IPlayerActionStatus.Type.Climb;
             }
