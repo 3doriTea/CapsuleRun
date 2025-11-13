@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using System;
 using UnityEngine.Events;
+using Unity.VisualScripting;
 
 namespace PlayScene
 {
@@ -122,9 +123,12 @@ namespace PlayScene
     [RequireComponent(typeof(CharacterController))]
     public class PlayerController : MonoBehaviour
     {
+        const float MovingVeloDeadZone = 1.0f;
         const float RightAngle = 0.0f;
         const float LeftAngle = 180.0f;
 
+        [SerializeField]
+        private CapAnimController animController;
         // 横入力スライダー
         [SerializeField]
         private MoveSliderController moveSliderController;
@@ -184,6 +188,12 @@ namespace PlayScene
 
             // アクションの更新
             UpdateAction();
+
+            animController.SetIsRunning(Mathf.Abs(status.Velocity.x) > MovingVeloDeadZone);
+            if (status.IsGrounded && status.InputJump)
+            {
+                animController.Jump();
+            }
 
             //Debug.Log(status);
         }
