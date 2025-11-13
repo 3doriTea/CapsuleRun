@@ -121,9 +121,11 @@ namespace WalkScene
         private WalkingController walkingController;
         [SerializeField]
         private InfoController infoController;
+        public static int TotalStepCount { get; private set; }
 
         public void DestroyMe()
         {
+            TotalStepCount = StepCount;
             Destroy(gameObject);
         }
 
