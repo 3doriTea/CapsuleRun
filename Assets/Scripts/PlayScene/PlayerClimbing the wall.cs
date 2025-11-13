@@ -36,14 +36,14 @@ public class PlayerClimbingthewall : MonoBehaviour
     {
 
         //RayCastによる壁の検出
-        bool wallDetected = Physics.Raycast(transform.position, transform.right, out wallHit, rayDistance);
+        playerController.status.IsTouchWallForward = Physics.Raycast(transform.position, transform.right, out wallHit, rayDistance);
         Debug.DrawRay(transform.position, transform.right * rayDistance, new Color(1, 0, 1));
         Mouse mouse = Mouse.current;
         // bool rightMouseHeld = Input.GetMouseButton(1);
         bool rightMouseHeld = mouse.rightButton.IsPressed();
        
         //壁に当たったら
-        if (wallDetected &&  !playerController.status.IsClimbing)
+        if (playerController.status.IsTouchWallForward &&  !playerController.status.IsClimbing)
         {
             Debug.Log("壁を登れるよ");
             StartClimbing();
@@ -51,7 +51,7 @@ public class PlayerClimbingthewall : MonoBehaviour
         //壁から離れたら
         else if (playerController.status.IsClimbing )
         {
-            if(!wallDetected)
+            if(!playerController.status.IsTouchWallForward)
             StopClimbing();
         }
         if (playerController.status.IsClimbing)

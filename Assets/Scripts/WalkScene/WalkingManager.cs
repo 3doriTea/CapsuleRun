@@ -58,20 +58,24 @@ namespace WalkScene
         private static WaitForSeconds _waitForSeconds1_0 = new(1.0f);
         private static WaitForSeconds stepCountDelay = new(3.0f);
         public int StepCount  // 計測開始からの歩数
-#if UNITY_ANDROID
+#if UNITY_EDITOR
+        {
+            get; private set;
+        }
+#elif UNITY_ANDROID
         {
             get
             {
                 return previousStepCount - startStepCount;
             }
         }
-#elif UNITY_EDITOR
+#endif
+        public float TotalDistance  // km
+#if UNITY_EDITOR             
         {
             get; private set;
         }
-#endif
-        public float TotalDistance  // km
-#if UNITY_ANDROID
+#elif UNITY_ANDROID
         {
             get
             {
@@ -104,10 +108,6 @@ namespace WalkScene
                     return EARTH_RADIUS_KM * c;
                 }
             }
-        }
-#elif UNITY_EDITOR
-        {
-            get; private set;
         }
 #endif
         private readonly List<LocationStamp> history = new(HistoryCapacity);  // 座標履歴
