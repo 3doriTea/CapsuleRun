@@ -18,7 +18,7 @@ public class NewMonoBehaviourScript : MonoBehaviour
     private PlayerController playerContoroller;
     private CharacterController pController;
     bool IsSwing = false;
-    private float rayoffsetheight;
+    private Vector3 rayoffsetheight;
      void Start()
      {
         playerContoroller = GetComponent<PlayerController>();
@@ -28,20 +28,25 @@ public class NewMonoBehaviourScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 rayOrigin = transform.position + Vector3.up * rayoffsetheight;
-        bool monkyBarsDetected = Physics.Raycast(rayOrigin, transform.up, out monkeybarsHit, rayDistance);
-        Debug.DrawRay(rayOrigin, transform.up * rayDistance, new Color(0, 1, 1));
+        //  Vector3 rayOrigin = transform.position + Vector3.up * rayoffsetheight;
+        Vector3 rayOrigin = transform.position +  rayoffsetheight;
+        bool monkyBarsDetected = Physics.Raycast(transform.position, rayOrigin, out monkeybarsHit, rayDistance);
+        Debug.DrawRay(rayOrigin, transform.up * rayDistance, Color.red);
 
 
         if (monkyBarsDetected && !IsSwing)
         {
-            Debug.Log("天井についている");
+            Debug.Log("天井に衝突しました");
              StartSwing();
         }
         else if(IsSwing)
         {
             if(!monkyBarsDetected)
-            StopSwing();
+            {
+                Debug.Log("天井はない");
+                StopSwing();
+            }
+            
         }
         if(IsSwing)
         {
@@ -56,20 +61,21 @@ public class NewMonoBehaviourScript : MonoBehaviour
     private void StartSwing()
     {
         IsSwing = true;
-        Debug.Log("Swing Climb");
+        Debug.Log("天井を伝っているよ");
         moveDirection = Vector3.zero;
+      
     }
     private void StopSwing()
     {
         IsSwing = false;
-        Debug.Log("Stop Swing Climb");
-        moveDirection.x = 0;
+        Debug.Log("天井に付いていないよ");
+        moveDirection.y = 0;
     }
     private void SwingMonkeyBars()
     {
-        float horizontalInput = playerContoroller.status.InputMoveX 
-                               * playerContoroller.status.InputMoveX;
-        Vector3 swingSlide = Vector3.up * horizontalInput;
+        float horizontalInput = playerContoroller.status.InputMoveX * playerContoroller.status.InputMoveX;
+        //左に移動
+        Vector3 swingSlide = Vector3.left * horizontalInput;
 
         Vector3 targetMove = swingSlide.normalized * swingSpeed;
         pController.Move(targetMove * Time.deltaTime);
