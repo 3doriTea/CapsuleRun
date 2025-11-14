@@ -209,7 +209,7 @@ namespace PlayScene
 
         void OnDestroy()
         {
-            moveAction.Disable();
+            //moveAction.Disable();
         }
 
         /// <summary>
