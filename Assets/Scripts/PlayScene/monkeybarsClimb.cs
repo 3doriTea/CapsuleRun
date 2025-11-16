@@ -1,6 +1,7 @@
-using System.Runtime.CompilerServices;
-using PlayScene;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using System.Collections.Generic;
+using PlayScene;
 
 
 [RequireComponent(typeof(PlayerController))]
@@ -14,11 +15,12 @@ public class NewMonoBehaviourScript : MonoBehaviour
     private float rayDistance;
     private LayerMask climbableMonkyBars;
     private Vector3 moveDirection = Vector3.zero;
-    private RaycastHit monkeybarsHit;
+    private RaycastHit hit;
     private PlayerController playerContoroller;
     private CharacterController pController;
     bool IsSwing = false;
-    private Vector3 rayoffsetheight;
+    private float maxDistance = 1.0f;
+    private Vector3 rayoffsetheight = new Vector3(0,0.5f,0);
      void Start()
      {
         playerContoroller = GetComponent<PlayerController>();
@@ -28,27 +30,36 @@ public class NewMonoBehaviourScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+       // playerContoroller.status.IsTouchWallUp
         //  Vector3 rayOrigin = transform.position + Vector3.up * rayoffsetheight;
         Vector3 rayOrigin = transform.position +  rayoffsetheight;
-        bool monkyBarsDetected = Physics.Raycast(transform.position, rayOrigin, out monkeybarsHit, rayDistance);
+        bool monkyBarsDetected = Physics.Raycast(rayOrigin, transform.up, out hit, maxDistance, climbableMonkyBars);
         Debug.DrawRay(rayOrigin, transform.up * rayDistance, Color.red);
 
 
-        if (monkyBarsDetected && !IsSwing)
+        //if (monkyBarsDetected && !IsSwing)
+        //{
+        //    Debug.Log("天井に衝突しました");
+        //     StartSwing();
+        //}
+        //else if(IsSwing)
+        //{
+        //    if(!monkyBarsDetected)
+        //    {
+        //        Debug.Log("天井はない");
+        //        StopSwing();
+        //    }
+            
+        //}
+        if(monkyBarsDetected)
         {
             Debug.Log("天井に衝突しました");
-             StartSwing();
         }
-        else if(IsSwing)
+        else
         {
-            if(!monkyBarsDetected)
-            {
-                Debug.Log("天井はない");
-                StopSwing();
-            }
-            
+            Debug.Log("地面にいる");
         }
-        if(IsSwing)
+        if (IsSwing)
         {
             SwingMonkeyBars();
         }
