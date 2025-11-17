@@ -79,7 +79,6 @@ namespace PlayScene
             Vector3 v = status.Velocity;
             v.y = force * Config.Player.MoveSpeedPerSec;
             status.Velocity = v;
-            Debug.Log(v); 
         }
     }
 }

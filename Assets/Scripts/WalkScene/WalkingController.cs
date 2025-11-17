@@ -70,10 +70,8 @@ namespace WalkScene
                         MoveScene(InnerScene.ToPlay);
                         break;
                     default:
-                        Debug.LogError("未カバーのミニシーン");
                         break;
                 }
-                Debug.Log("ミニシーン遷移");
             }
         }
 #endif
@@ -84,19 +82,15 @@ namespace WalkScene
         /// <param name="next">次のシーン</param>
         public void MoveScene(InnerScene next, bool force = false)
         {
-            Debug.Log($"{currentScene}->{next}");
             if (currentScene == next && !force)
             {
-                Debug.Log("同じシーン");
                 return;  // 今も次も同じなら無視
             }
             if (currentScene == InnerScene.Start && next == InnerScene.Stop)
             {
-                Debug.Log("まだ止まっている");
                 return;  // 今がスタートでまだ止まっているならスタートのままにする
             }
 
-            Debug.Log("遷移したはず");
             // 現在のシーンゲームオブジェクトを無効化して次のシーンのを有効化する
             sceneGameObjects[(int)currentScene].SetActive(false);
             sceneGameObjects[(int)next].SetActive(true);

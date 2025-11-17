@@ -262,8 +262,6 @@ namespace PlayScene
         /// </summary>
         void UpdateAction()
         {
-            Debug.Log($"UpdateActionPC{currentPASType}");
-
             if (status.InputMoveX > 0.0f)
             {
                 transform.rotation = Quaternion.Euler(0.0f, RightAngle, 0.0f);
