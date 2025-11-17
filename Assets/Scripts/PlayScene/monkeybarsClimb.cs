@@ -12,13 +12,15 @@ public class NewMonoBehaviourScript : MonoBehaviour
     private float playerHeight;
     private float swingSpeed;
     private float walkSpeed;
+    
     private float rayDistance;
     private LayerMask climbableMonkyBars;
     private Vector3 moveDirection = Vector3.zero;
+    
     private RaycastHit hit;
     private PlayerController playerContoroller;
     private CharacterController pController;
-    bool IsSwing = false;
+   
     private float maxDistance = 1.0f;
     private Vector3 rayoffsetheight = new Vector3(0,0.5f,0);
      void Start()
@@ -29,37 +31,28 @@ public class NewMonoBehaviourScript : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-       // playerContoroller.status.IsTouchWallUp
-        //  Vector3 rayOrigin = transform.position + Vector3.up * rayoffsetheight;
+    {  
+
+        playerContoroller.status.IsTouchWallUp = false;
         Vector3 rayOrigin = transform.position +  rayoffsetheight;
         bool monkyBarsDetected = Physics.Raycast(rayOrigin, transform.up, out hit, maxDistance, climbableMonkyBars);
         Debug.DrawRay(rayOrigin, transform.up * rayDistance, Color.red);
 
-
-        //if (monkyBarsDetected && !IsSwing)
-        //{
-        //    Debug.Log("天井に衝突しました");
-        //     StartSwing();
-        //}
-        //else if(IsSwing)
-        //{
-        //    if(!monkyBarsDetected)
-        //    {
-        //        Debug.Log("天井はない");
-        //        StopSwing();
-        //    }
-            
-        //}
-        if(monkyBarsDetected)
+        if(monkyBarsDetected && !playerContoroller.status.IsTouchWallUp)
         {
             Debug.Log("天井に衝突しました");
+            StartSwing();
         }
-        else
+        else if(playerContoroller.status.IsTouchWallUp)
         {
-            Debug.Log("地面にいる");
+            if(!monkyBarsDetected)
+            {
+                Debug.Log("地面にいる");
+                StopSwing();
+            }
+            
         }
-        if (IsSwing)
+        if (playerContoroller.status.IsTouchWallUp)
         {
             SwingMonkeyBars();
         }
@@ -71,14 +64,14 @@ public class NewMonoBehaviourScript : MonoBehaviour
     }
     private void StartSwing()
     {
-        IsSwing = true;
+        playerContoroller.status.IsTouchWallUp = true;
         Debug.Log("天井を伝っているよ");
         moveDirection = Vector3.zero;
       
     }
     private void StopSwing()
     {
-        IsSwing = false;
+        playerContoroller.status.IsTouchWallUp = false;
         Debug.Log("天井に付いていないよ");
         moveDirection.y = 0;
     }
