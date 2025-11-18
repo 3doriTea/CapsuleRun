@@ -219,6 +219,7 @@ namespace PlayScene
         {
             onGoal = true;
             currentPASType = IPlayerActionStatus.Type.Goal;
+            Debug.Log("OnGoal by PLAYER");
         }
 
         void OnDestroy()
@@ -231,7 +232,7 @@ namespace PlayScene
         /// </summary>
         void UpdateState()
         {
-            if (linesController.GetGoalDistanceRate() >= 1.0f)
+            if (linesController.GetGoalDistanceRate() >= 1.0f && !onGoal)
             {
                 OnGoalAction.Invoke();
             }

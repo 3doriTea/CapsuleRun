@@ -32,7 +32,6 @@ namespace PlayScene
 
         private void OnGoal()
         {
-            goalTime = timerController.StopAndGetTime();
             Invoke(nameof(ToResultScene), ToResultSceneTime);
         }
         

@@ -36,7 +36,8 @@ public class PlayerClimbingthewall : MonoBehaviour
     {
 
         //RayCastによる壁の検出
-        playerController.status.IsTouchWallForward = Physics.Raycast(transform.position, transform.right, out wallHit, rayDistance);
+        playerController.status.IsTouchWallForward = Physics.Raycast(
+            transform.position, transform.right, out wallHit, rayDistance, climbableWallLayer);
         Debug.DrawRay(transform.position, transform.right * rayDistance, new Color(1, 0, 1));
 
 #if UNITY_EDITOR

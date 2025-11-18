@@ -29,11 +29,15 @@ namespace PlayScene
             textMesh.SetText($"{minutes:D2} : {seconds:D2} . {milliseconds:D2}");
         }
 
-        public float StopAndGetTime()
+        public void StopTime()
         {
             VerticalController.goalTime = timer;
             stopped = true;
-            return timer;
+        }
+
+        public void OnStopTimer()
+        {
+            StopTime();
         }
 
         public static (int minutes, int seconds, int milliseconds)ToString(float time)
