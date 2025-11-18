@@ -117,7 +117,6 @@ namespace PlayScene
 			IPlayerAction action,
 			System.Action<IPlayerActionStatus.Type> changeStatus)
 		{
-			Debug.Log("UpdateActionClimb");
 			if (status.IsTouchWallForward)
 			{
 				if (status.InputMoveX * status.InputMoveX > Config.Input.MoveDeadzoneSquared)
@@ -166,7 +165,7 @@ namespace PlayScene
 			IPlayerAction action,
 			System.Action<IPlayerActionStatus.Type> changeStatus)
 		{
-			Debug.Log("UpdateActionSwing");
+			//Debug.Log("UpdateActionSwing");
 			if (status.InputMoveX * status.InputMoveX > Config.Input.MoveDeadzoneSquared)
 			{
 				action.Move(status.InputMoveX);  // 入力がデッドゾーンより大きいなら移動アクション

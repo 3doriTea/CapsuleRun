@@ -143,6 +143,11 @@ namespace WalkScene
             InputSystem.EnableDevice(StepCounter.current);
 
             Screen.orientation = ScreenOrientation.Portrait;  // 画面縦に
+            //Screen.autorotateToPortrait = true;
+            //Screen.autorotateToLandscapeLeft = false;
+            //Screen.autorotateToLandscapeRight = false;
+            //Screen.autorotateToPortraitUpsideDown = false;
+            Debug.Log("Screen-orientation");
 
             StartCoroutine(UpdateLocation());
             StartCoroutine(UpdateStepCounter());
@@ -172,11 +177,9 @@ namespace WalkScene
 
         private void CheckMoving()
         {
-            Debug.Log($"Steps = previousStepCount:{previousStepCount} - startStepCount:{startStepCount}");
             infoController.SetStepCount(StepCount);
             float totalDistance = TotalDistance;
             infoController.SetDistance(totalDistance);
-            Debug.Log($"dist:{totalDistance}, historyCount:{history.Count}");
             if (history.Count > 0)
             {
                 infoController.SetStartTime(ToLocalDateTime(history[0].timestamp));

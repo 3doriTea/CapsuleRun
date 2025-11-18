@@ -88,6 +88,8 @@ namespace PlayScene
     {
         // ジャンプしているか
         public bool IsJumping { get; set; }
+        // ダッシュしているか
+        public bool IsDussing { get; set; }
         // 登っているか
         public bool IsClimbing { get; set; }
         // 地面にいるか true / false
@@ -100,8 +102,12 @@ namespace PlayScene
         public float InputMoveX { get; set; }
         // ジャンプ入力
         public bool InputJump { get; set; }
+        // ダッシュの入力
+        public bool InputDush { get; set; }
         // 速度(m/s)
         public Vector3 Velocity { get; set; }
+        // ダッシュ可能値
+        public float DushableValue { get; set; }
         // 当たっているコライダーのId
         public List<(int self, int target)> HitColliderId { get; set; } = new();
 
@@ -126,7 +132,13 @@ namespace PlayScene
         const float MovingVeloDeadZone = 1.0f;
         const float RightAngle = 0.0f;
         const float LeftAngle = 180.0f;
+        const float DushRate = 2.0f;  // ダッシュ時の移動速度倍率
 
+
+
+        // ダッシュエフェクト出すゲームオブジェクト
+        [SerializeField]
+        private GameObject dushEffector;
         [SerializeField]
         private CapAnimController animController;
         // 横入力スライダー
@@ -195,6 +207,8 @@ namespace PlayScene
                 animController.Jump();
             }
 
+            dushEffector.SetActive(status.IsDussing);
+
             //Debug.Log(status);
         }
 
@@ -223,13 +237,22 @@ namespace PlayScene
             }
 
             status.IsGrounded = parts.CharacterController.isGrounded;
-            status.InputJump = inputController.InputJump
+            status.InputJump = (inputController.InputJump
 #if UNITY_EDITOR
-                || Keyboard.current[Key.Space].isPressed;
+                || Keyboard.current[Key.Space].isPressed
 #endif
-            ;
+            );
             // MEMO: 横移動入力スライダーに切り替え 元:status.InputMoveX = inputController.InputHorizontal + moveAction.ReadValue<Vector2>().x;
             status.InputMoveX = moveSliderController.Value;
+
+            // ダッシュ入力で移動入力をダッシュ倍する
+            status.InputDush = (inputController.InputDush
+#if UNITY_EDITOR
+                    || Keyboard.current[Key.LeftShift].isPressed
+#endif
+            );
+
+            status.IsDussing = status.InputDush && status.DushableValue > 0.0f;
 
             status.IsTouchWallUp = false;
             status.IsTouchWallForward = false;
@@ -262,8 +285,6 @@ namespace PlayScene
         /// </summary>
         void UpdateAction()
         {
-            Debug.Log($"UpdateActionPC{currentPASType}");
-
             if (status.InputMoveX > 0.0f)
             {
                 transform.rotation = Quaternion.Euler(0.0f, RightAngle, 0.0f);
