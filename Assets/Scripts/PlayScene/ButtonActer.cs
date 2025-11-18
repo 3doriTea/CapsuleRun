@@ -2,13 +2,18 @@ using UnityEngine;
 
 public class ButtonActer : MonoBehaviour
 {
+    const string PlayerTagName = "Player";
+
     [SerializeField]
     private GameObject breakGameObject;
 
-    private void OnControllerColliderHit(ControllerColliderHit hit)
+    private void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"ƒqƒbƒg:{hit.gameObject.name}");
-        Destroy(breakGameObject);
-        Destroy(gameObject);
+        if (other.gameObject.tag == PlayerTagName)
+        {
+            Destroy(breakGameObject);
+            breakGameObject = null;
+            Destroy(gameObject);
+        }
     }
 }
