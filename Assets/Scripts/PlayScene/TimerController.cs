@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using ResultScene;
 
 namespace PlayScene
 {
@@ -9,13 +10,12 @@ namespace PlayScene
         private TextMeshProUGUI textMesh;
         private float timer = 0.0f;
         private bool stopped = false;
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
+
         void Start()
         {
-
+            VerticalController.goalTime = 0.0f;
         }
 
-        // Update is called once per frame
         void Update()
         {
             if (stopped)
@@ -25,19 +25,24 @@ namespace PlayScene
 
             timer += Time.deltaTime;
 
-            int minutes = (int)(timer / 60.0f);
-
-            int seconds = (int)(timer % 60.0f);
-
-            int milliseconds = (int)(timer % 1.0f * 100.0f);
-
+            var (minutes, seconds, milliseconds) = ToString(timer);
             textMesh.SetText($"{minutes:D2} : {seconds:D2} . {milliseconds:D2}");
         }
 
         public float StopAndGetTime()
         {
+            VerticalController.goalTime = timer;
             stopped = true;
             return timer;
+        }
+
+        public static (int minutes, int seconds, int milliseconds)ToString(float time)
+        {
+            int minutes = (int)(time / 60.0f);
+            int seconds = (int)(time % 60.0f);
+            int milliseconds = (int)(time % 1.0f * 100.0f);
+
+            return (minutes, seconds, milliseconds);
         }
     }
 }

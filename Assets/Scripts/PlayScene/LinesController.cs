@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -7,19 +8,19 @@ namespace PlayScene
 	public class LinesController : MonoBehaviour
 	{
 		[SerializeField]
-		[Tooltip("ƒS[ƒ‹ƒ‰ƒCƒ“‚ÌƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚Ì–¼‘O")]
+		[Tooltip("ï¿½Sï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ÌƒQï¿½[ï¿½ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Ì–ï¿½ï¿½O")]
 		private string goalGameObjectName;
 
 		[SerializeField]
-		[Tooltip("’†ŠÔƒe[ƒv‚âƒS[ƒ‹ƒe[ƒv‚ğ‚Ü‚Æ‚ß‚Ä‚¨‚­ƒ‹[ƒg")]
+		[Tooltip("ï¿½ï¿½ï¿½Ôƒeï¿½[ï¿½vï¿½ï¿½Sï¿½[ï¿½ï¿½ï¿½eï¿½[ï¿½vï¿½ï¿½ï¿½Ü‚Æ‚ß‚Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½g")]
 		private Transform linesRoot;
 		[SerializeField]
-		[Tooltip("ƒvƒŒƒCƒ„[‚ÌÀ•WŒnƒRƒ“ƒ|[ƒlƒ“ƒg")]
+		[Tooltip("ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ìï¿½ï¿½Wï¿½nï¿½Rï¿½ï¿½ï¿½|ï¿½[ï¿½lï¿½ï¿½ï¿½g")]
 		private Transform playerTransform;
-		private float goalPositionX;  // ƒS[ƒ‹‚ÌxÀ•W
+		private float goalPositionX;  // ï¿½Sï¿½[ï¿½ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½W
 		private List<float> checkPointsPosX = new ();
 		private int currentPoint;
-		public UnityAction<float, int> OnCheckPoint = (float x, int index) => { };
+		public Action<float, int> OnCheckPoint = (float x, int index) => { };
 		void Start()
 		{
 			foreach (Transform transform in linesRoot)
