@@ -8,6 +8,7 @@ namespace PlayScene
         const string ButtonNameJump = "Jump";
         const string ButtonNameLeft = "Left";
         const string ButtonNameRight = "Right";
+        //const 
 
         [SerializeField]
         private Button[] buttonJump;

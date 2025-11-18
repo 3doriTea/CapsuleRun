@@ -7,6 +7,7 @@ public class ButtonActer : MonoBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
+        Debug.Log($"ƒqƒbƒg:{hit.gameObject.name}");
         Destroy(breakGameObject);
         Destroy(gameObject);
     }
