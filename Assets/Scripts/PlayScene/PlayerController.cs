@@ -126,6 +126,7 @@ namespace PlayScene
         const float MovingVeloDeadZone = 1.0f;
         const float RightAngle = 0.0f;
         const float LeftAngle = 180.0f;
+        const float DushRate = 2.0f;  // ダッシュ時の移動速度倍率
 
         [SerializeField]
         private CapAnimController animController;
@@ -230,6 +231,16 @@ namespace PlayScene
             ;
             // MEMO: 横移動入力スライダーに切り替え 元:status.InputMoveX = inputController.InputHorizontal + moveAction.ReadValue<Vector2>().x;
             status.InputMoveX = moveSliderController.Value;
+
+            // ダッシュ入力で移動入力をダッシュ倍する
+            if (inputController.InputDush
+#if UNITY_EDITOR
+                    || Keyboard.current[Key.LeftShift].isPressed
+#endif
+                )
+            {
+                status.InputMoveX *= DushRate;
+            }
 
             status.IsTouchWallUp = false;
             status.IsTouchWallForward = false;

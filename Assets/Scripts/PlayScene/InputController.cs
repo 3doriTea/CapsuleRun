@@ -8,7 +8,7 @@ namespace PlayScene
         const string ButtonNameJump = "Jump";
         const string ButtonNameLeft = "Left";
         const string ButtonNameRight = "Right";
-        //const 
+        const string ButtonNameDash = "Dash";
 
         [SerializeField]
         private Button[] buttonJump;
@@ -17,8 +17,10 @@ namespace PlayScene
         [SerializeField]
         private Button buttonRight;
 
+        // ダッシュ入力
+        public bool InputDush { get; private set; } = false;
         // ジャンプ入力
-        public bool InputJump { get; private set; }
+        public bool InputJump { get; private set; } = false;
         // 左右方向の入力
         public float InputHorizontal { get; private set; }
         // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -39,6 +41,9 @@ namespace PlayScene
                 case ButtonNameJump:
                     InputJump = true;
                     break;
+                case ButtonNameDash:
+                    InputDush = true;
+                    break;
                 case ButtonNameLeft:
                     InputHorizontal = -1.0f;
                     break;
@@ -56,6 +61,9 @@ namespace PlayScene
             {
                 case ButtonNameJump:
                     InputJump = false;
+                    break;
+                case ButtonNameDash:
+                    InputDush = false;
                     break;
                 case ButtonNameLeft:
                     InputHorizontal = 0;
