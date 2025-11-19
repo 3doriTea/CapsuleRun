@@ -134,7 +134,7 @@ namespace PlayScene
         const float LeftAngle = 180.0f;
         const float DushRate = 2.0f;  // ダッシュ時の移動速度倍率
 
-
+        public static float dushValue = 0.0f;  // ダッシュのために溜まった量
 
         // ダッシュエフェクト出すゲームオブジェクト
         [SerializeField]
@@ -208,8 +208,6 @@ namespace PlayScene
             }
 
             dushEffector.SetActive(status.IsDussing);
-
-            //Debug.Log(status);
         }
 
         /// <summary>

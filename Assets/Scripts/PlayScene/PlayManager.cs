@@ -14,13 +14,8 @@ namespace PlayScene
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-            //Screen.autorotateToPortrait = false;
-            //Screen.autorotateToLandscapeLeft = true;
-            //Screen.autorotateToLandscapeRight = true;
-            //Screen.autorotateToPortraitUpsideDown = false;
-            //Screen.orientation = ScreenOrientation.AutoRotation;
+            ScreenUtil.SetRotate(ScreenOrientation.LandscapeLeft);
 
-            Screen.orientation = ScreenOrientation.LandscapeLeft;
             playerController.OnGoalAction.AddListener(OnGoal);
         }
         

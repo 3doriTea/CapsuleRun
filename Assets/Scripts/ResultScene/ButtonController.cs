@@ -5,7 +5,7 @@ namespace ResultScene
 {
     public class ButtonController : MonoBehaviour
     {
-        const string SceneNameWalk = "WalkScene";
+        const string SceneNameWalk = "Walking";
         const string SceneNameSample = "SampleScene";
 
         /// <summary>

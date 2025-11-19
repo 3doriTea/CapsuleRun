@@ -4,13 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Android;
 using UnityEngine.InputSystem;
-using System.Runtime.InteropServices;
+using PlayScene;
 
 namespace WalkScene
 {
     public class WalkingManager : MonoBehaviour
     {
         const string ActivityRecognition = "android.permission.ACTIVITY_RECOGNITION";
+        const string FineLocation = "android.permission.ACCESS_FINE_LOCATION";
+        const string CoarseLocation = "android.permission.ACCESS_COARSE_LOCATION";
         const int HistoryCapacity = 1000;
 
         struct LocationStamp
@@ -126,7 +128,15 @@ namespace WalkScene
         public void DestroyMe()
         {
             TotalStepCount = StepCount;
+            PlayerController.dushValue += TotalStepCount;
             Destroy(gameObject);
+        }
+
+        public void OnRequestPremission()
+        {
+            Permission.RequestUserPermission(ActivityRecognition);
+            Permission.RequestUserPermission(FineLocation);
+            Permission.RequestUserPermission(CoarseLocation);
         }
 
         private void Start()
@@ -139,10 +149,21 @@ namespace WalkScene
                 Permission.RequestUserPermission(ActivityRecognition);
             }
 
-#if UNITY_ANDROID
+            if (!Permission.HasUserAuthorizedPermission(FineLocation))
+            {
+                Permission.RequestUserPermission(FineLocation);
+            }
+
+            if (!Permission.HasUserAuthorizedPermission(CoarseLocation))
+            {
+                Permission.RequestUserPermission(CoarseLocation);
+            }
+#if UNITY_EDITOR
+
+#elif UNITY_ANDROID
             InputSystem.EnableDevice(StepCounter.current);
 
-            Screen.orientation = ScreenOrientation.Portrait;  // 画面縦に
+            //Screen.orientation = ScreenOrientation.Portrait;  // 画面縦に
             //Screen.autorotateToPortrait = true;
             //Screen.autorotateToLandscapeLeft = false;
             //Screen.autorotateToLandscapeRight = false;
