@@ -86,6 +86,8 @@ namespace PlayScene
     /// </summary>
     public class PlayerStatus
     {
+        public static readonly float DushRate = 2.0f;  // ダッシュ時の移動速度倍率
+
         // ジャンプしているか
         public bool IsJumping { get; set; }
         // ダッシュしているか
@@ -132,7 +134,6 @@ namespace PlayScene
         const float MovingVeloDeadZone = 1.0f;
         const float RightAngle = 0.0f;
         const float LeftAngle = 180.0f;
-        const float DushRate = 2.0f;  // ダッシュ時の移動速度倍率
 
         public static float dushValue = 0.0f;  // ダッシュのために溜まった量
 
@@ -168,6 +169,9 @@ namespace PlayScene
         void Start()
         {
             OnGoalAction.AddListener(OnGoal);
+
+            status.DushableValue = dushValue;
+            dushValue = 0.0f;
 
             Debug.Assert(moveSliderController != null, "横移動入力スライダーをアタッチしてください。");
 
@@ -252,6 +256,10 @@ namespace PlayScene
             );
 
             status.IsDussing = status.InputDush && status.DushableValue > 0.0f;
+            if (status.IsDussing)
+            {
+                status.DushableValue -= Time.deltaTime;
+            }
 
             status.IsTouchWallUp = false;
             status.IsTouchWallForward = false;

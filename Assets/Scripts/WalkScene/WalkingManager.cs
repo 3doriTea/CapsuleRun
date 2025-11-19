@@ -128,7 +128,7 @@ namespace WalkScene
         public void DestroyMe()
         {
             TotalStepCount = StepCount;
-            PlayerController.dushValue += TotalStepCount;
+            PlayerController.dushValue = TotalStepCount;
             Destroy(gameObject);
         }
 

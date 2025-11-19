@@ -2,13 +2,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using WalkScene;
+using PlayScene;
 
 public class ResultController : MonoBehaviour
 {
+    const float ATimeNeedsStepCount = 20.0f;
+
     [SerializeField]
     private TextMeshProUGUI textMeshDistance;
     [SerializeField]
     private TextMeshProUGUI textMeshSteps;
+
 
     [SerializeField]
     private GameObject infoGameObject;
@@ -21,6 +25,8 @@ public class ResultController : MonoBehaviour
 
         textMeshDistance.text = $"{walkingManager.TotalDistance:F2} km移動したよ";
         textMeshSteps.text = $"{walkingManager.StepCount} 歩だったよ！";
+
+        PlayerController.dushValue = walkingManager.StepCount / ATimeNeedsStepCount;
     }
 
     // Update is called once per frame
