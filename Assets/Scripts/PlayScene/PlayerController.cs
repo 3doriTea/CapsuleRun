@@ -171,7 +171,6 @@ namespace PlayScene
             OnGoalAction.AddListener(OnGoal);
 
             status.DushableValue = dushValue;
-            dushValue = 0.0f;
 
             Debug.Assert(moveSliderController != null, "横移動入力スライダーをアタッチしてください。");
 
