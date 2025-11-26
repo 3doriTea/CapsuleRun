@@ -538,7 +538,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &321003338
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1650,7 +1650,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 55e22c5f6fd1c7e438a8beeab0a36e65, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7b8a6b334e7752a4f8d603014f143387, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2141,8 +2141,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 880, y: -1300}
-  m_SizeDelta: {x: 110, y: 80}
+  m_AnchoredPosition: {x: 710, y: -1110}
+  m_SizeDelta: {x: 290, y: 185}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1093579574
 MonoBehaviour:
@@ -2191,14 +2191,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 128
+  m_fontSizeBase: 128
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -3516,8 +3516,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -339.7, y: -24.26}
-  m_SizeDelta: {x: 479, y: 354}
+  m_AnchoredPosition: {x: -237.4, y: -1.4}
+  m_SizeDelta: {x: 272, y: 354}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1632044625
 MonoBehaviour:
@@ -3539,7 +3539,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cc2107bad5d6b724c890b5c8c72e6e9d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 250d310a8ffc00d4f80f8a911a9cbd1d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4000,7 +4000,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -1050}
+  m_AnchoredPosition: {x: 320, y: -1050}
   m_SizeDelta: {x: 200, y: 490}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1948001278
