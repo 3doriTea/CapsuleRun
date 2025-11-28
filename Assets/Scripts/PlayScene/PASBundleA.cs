@@ -7,7 +7,41 @@ using UnityEngine;
 namespace PlayScene
 {
     /// <summary>
-    /// プレイヤーのステータス-走る
+    /// プレイヤーのステータス-気絶
+    /// </summary>
+    public class PlayerActionStatusFainting : IPlayerActionStatus
+    {
+        public void UpdateJump(
+            PlayerStatus status,
+            IPlayerAction action,
+            System.Action<IPlayerActionStatus.Type> changeStatus)
+        {
+            if (status.IsGrounded)
+            {
+                action.Landing();  // 地面に触れているなら着地処理
+
+                status.IsJumping = false;
+            }
+            else
+            {
+                action.Gravity();  // 重力適用
+            }
+        }
+
+        public void UpdateMove(
+            PlayerStatus status,
+            IPlayerAction action,
+            System.Action<IPlayerActionStatus.Type> changeStatus)
+        {
+            if (status.FaintTimeLeft <= 0.0f)
+            {
+                action.Move(0.0f);
+            }
+        }
+    }
+
+    /// <summary>
+    /// プレイヤーのステータス-ゴール
     /// </summary>
     public class PlayerActionStatusGoal : IPlayerActionStatus
     {

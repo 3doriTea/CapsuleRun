@@ -1,19 +1,22 @@
 using UnityEngine;
 
-public class ButtonActer : MonoBehaviour
+namespace PlayScene
 {
-    const string PlayerTagName = "Player";
-
-    [SerializeField]
-    private GameObject breakGameObject;
-
-    private void OnTriggerEnter(Collider other)
+    public class ButtonActer : MonoBehaviour
     {
-        if (other.gameObject.tag == PlayerTagName)
+        const string PlayerTagName = "Player";
+
+        [SerializeField]
+        private GameObject breakGameObject;
+
+        private void OnTriggerEnter(Collider other)
         {
-            Destroy(breakGameObject);
-            breakGameObject = null;
-            Destroy(gameObject);
+            if (other.gameObject.tag == PlayerTagName)
+            {
+                Destroy(breakGameObject);
+                breakGameObject = null;
+                Destroy(gameObject);
+            }
         }
     }
 }

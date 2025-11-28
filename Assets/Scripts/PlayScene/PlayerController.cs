@@ -44,6 +44,7 @@ namespace PlayScene
             Climb,
             Swing,
             Goal,
+            Fainting,
             Max,
         }
 
@@ -110,6 +111,9 @@ namespace PlayScene
         public Vector3 Velocity { get; set; }
         // ダッシュ可能値
         public float DushableValue { get; set; }
+        // 気絶タイム
+        public float FaintTimeLeft { get; set; }
+        public bool IsFainting { get { return FaintTimeLeft > 0.0f; }}
         // 当たっているコライダーのId
         public List<(int self, int target)> HitColliderId { get; set; } = new();
 
@@ -182,6 +186,7 @@ namespace PlayScene
             playerActionStatus[(int)IPlayerActionStatus.Type.Climb] = new PlayerActionStatusClimb();
             playerActionStatus[(int)IPlayerActionStatus.Type.Swing] = new PlayerActionStatusSwing();
             playerActionStatus[(int)IPlayerActionStatus.Type.Goal] = new PlayerActionStatusGoal();
+            playerActionStatus[(int)IPlayerActionStatus.Type.Fainting] = new PlayerActionStatusFainting();
             currentPASType = IPlayerActionStatus.Type.Run;
 
             foreach (IPlayerActionStatus status in playerActionStatus)
@@ -309,21 +314,35 @@ namespace PlayScene
                 currentPASType = IPlayerActionStatus.Type.Run;
             }
 
-            playerActionStatus[(int)currentPASType].UpdateMove(
-                status,
-                action,
-                type =>
-                {
-                    currentPASType = type;
-                });
+            if (status.IsFainting)  // 気絶中なら気絶の動き
+            {
+                status.FaintTimeLeft -= Time.deltaTime;
+                playerActionStatus[(int)IPlayerActionStatus.Type.Fainting].UpdateMove(
+                    status,
+                    action,
+                    type =>
+                    {
+                        currentPASType = type;
+                    });
+            }
+            else  // 気絶していないなら状況に合わせた動き
+            {
+                playerActionStatus[(int)currentPASType].UpdateMove(
+                    status,
+                    action,
+                    type =>
+                    {
+                        currentPASType = type;
+                    });
 
-            playerActionStatus[(int)currentPASType].UpdateJump(
-                status,
-                action,
-                type =>
-                {
-                    currentPASType = type;
-                });
+                playerActionStatus[(int)currentPASType].UpdateJump(
+                    status,
+                    action,
+                    type =>
+                    {
+                        currentPASType = type;
+                    });
+            }
 
             parts.CharacterController.Move(status.Velocity * Time.deltaTime);
         }
