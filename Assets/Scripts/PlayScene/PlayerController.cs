@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine.Events;
 using Unity.VisualScripting;
+using UnityEngine.UI;
 
 namespace PlayScene
 {
@@ -165,6 +166,8 @@ namespace PlayScene
         private InputController inputController;
         [SerializeField]
         private LinesController linesController;
+        [SerializeField]
+        private Slider tankSlider;
         private InputAction moveAction;
 
         private bool onGoal = false;
@@ -216,6 +219,7 @@ namespace PlayScene
             }
 
             dushEffector.SetActive(status.IsDussing);
+            tankSlider.value = status.DushableValue / dushValue;
         }
 
         /// <summary>

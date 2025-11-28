@@ -42,6 +42,7 @@ public class SpeedEffector : MonoBehaviour
             timeLefts[i] -= Time.deltaTime;
             float value = timeLefts[i] / EffectTime;
             effects[i].localScale = new Vector3(value, value, 0.1f);
+            effects[i].position += Vector3.forward * 0.3f;
             if (timeLefts[i] <= 0.0f)
             {
                 Destroy(effects[i].gameObject);
